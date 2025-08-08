@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Investment Calculator</title>
+    <!-- Use a simple font and load Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="container bg-white shadow-xl rounded-2xl p-8 lg:p-12">
+        <h1 class="text-4xl lg:text-5xl font-bold text-center mb-10 text-gray-800">Real Estate Investment Calculator</h1>
+
+        <div id="analysis-container" class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            <!-- Initial Analysis 1 Section -->
+            <div id="analysis1" class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <h2 class="text-3xl font-semibold text-blue-800 mb-6 text-center">Analysis 1</h2>
+                <div class="space-y-4">
+                    <div class="flex flex-col">
+                        <label for="address1" class="text-sm font-medium text-gray-700 mb-1">Property Address</label>
+                        <div class="flex items-center space-x-2">
+                             <input type="text" id="address1" placeholder="e.g., 123 Main St, Anytown" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 flex-grow">
+                             <button id="mapBtn1" class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors">Map</button>
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="price1" class="text-sm font-medium text-gray-700 mb-1">Purchase Price ($)</label>
+                        <input type="number" id="price1" value="300000" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="downPayment1" class="text-sm font-medium text-gray-700 mb-1">Down Payment (%)</label>
+                        <input type="number" id="downPayment1" value="20" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="rate1" class="text-sm font-medium text-gray-700 mb-1">Interest Rate (%)</label>
+                        <input type="number" id="rate1" value="6.5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="term1" class="text-sm font-medium text-gray-700 mb-1">Loan Term (Years)</label>
+                        <input type="number" id="term1" value="30" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="income1" class="text-sm font-medium text-gray-700 mb-1">Gross Rental Income ($/mo)</label>
+                        <input type="number" id="income1" value="2500" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="vacancy1" class="text-sm font-medium text-gray-700 mb-1">Vacancy Rate (%)</label>
+                        <input type="number" id="vacancy1" value="5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="propertyManagement1" class="text-sm font-medium text-gray-700 mb-1">Property Management (%)</label>
+                        <input type="number" id="propertyManagement1" value="8" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="taxes1" class="text-sm font-medium text-gray-700 mb-1">Property Taxes ($/yr)</label>
+                        <input type="number" id="taxes1" value="3600" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="insurance1" class="text-sm font-medium text-gray-700 mb-1">Insurance ($/mo)</label>
+                        <input type="number" id="insurance1" value="150" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="repairs1" class="text-sm font-medium text-gray-700 mb-1">Repairs & Maintenance ($/mo)</label>
+                        <input type="number" id="repairs1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="capex1" class="text-sm font-medium text-gray-700 mb-1">Capital Expenditures ($/mo)</label>
+                        <input type="number" id="capex1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Button & Share Link -->
+        <div class="flex flex-col lg:flex-row items-center justify-center mt-10 space-y-4 lg:space-y-0 lg:space-x-4">
+            <button id="addAnalysisBtn" class="bg-indigo-600 text-white font-bold py-4 px-10 rounded-full shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                Analyze Additional Property
+            </button>
+            <button id="compareBtn" class="bg-green-600 text-white font-bold py-4 px-10 rounded-full shadow-lg hover:bg-green-700 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                Compare Analyses
+            </button>
+            <button id="shareBtn" class="bg-gray-200 text-gray-800 font-semibold py-4 px-10 rounded-full shadow-lg hover:bg-gray-300 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
+                Share Link
+            </button>
+        </div>
+        <div id="copy-message" class="mt-4 text-center text-sm text-gray-500 hidden">Link copied to clipboard!</div>
+
+
+        <!-- Results Section -->
+        <div id="results" class="mt-12 space-y-6">
+            <h3 class="text-3xl font-semibold text-center text-gray-800">Comparison Results</h3>
+            <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                 <!-- Initial Result 1 Section -->
+                <div id="result1" class="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                    <p class="text-xl font-bold mb-2">Analysis 1</p>
+                    <p id="monthlyPayment1" class="text-gray-600">Mortgage: -</p>
+                    <p id="cashFlow1" class="text-2xl font-bold mt-4">Cash Flow: -</p>
+                </div>
+            </div>
+            <div id="winner" class="mt-8 text-center text-2xl font-bold"></div>
+            <!-- Graph section for comparison -->
+            <div class="mt-8">
+                <h4 class="text-2xl font-semibold text-center text-gray-700 mb-4">Cash Flow Comparison</h4>
+                <canvas id="cashFlowChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const analysisContainer = document.getElementById('analysis-container');
+        const resultsGrid = document.getElementById('results-grid');
+        const addAnalysisBtn = document.getElementById('addAnalysisBtn');
+        const compareBtn = document.getElementById('compareBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const copyMessageEl = document.getElementById('copy-message');
+
+        let analysisCount = 1;
+        const analysisColors = ['#3b82f6', '#22c55e', '#a855f7', '#eab308'];
+        const analysisBgColors = ['bg-blue-50', 'bg-green-50', 'bg-purple-50', 'bg-yellow-50'];
+        const analysisBorderColors = ['border-blue-200', 'border-green-200', 'border-purple-200', 'border-yellow-200'];
+        const analysisTextColors = ['text-blue-800', 'text-green-800', 'text-purple-800', 'text-yellow-800'];
+        const analysisPlaceholder = [
+            'e.g., 123 Main St, Anytown',
+            'e.g., 456 Elm St, Othertown',
+            'e.g., 789 Oak Ave, Yourtown',
+            'e.g., 101 Pine St, Mycity'
+        ];
+        const analysisRingColors = ['focus:ring-blue-500', 'focus:ring-green-500', 'focus:ring-purple-500', 'focus:ring-yellow-500'];
+        const analysisMapBtnBg = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500'];
+        const analysisMapBtnHoverBg = ['hover:bg-blue-600', 'hover:bg-green-600', 'hover:bg-purple-600', 'hover:bg-yellow-600'];
+
+        // Helper function to create an analysis section HTML string
+        function createAnalysisSection(index) {
+            const defaults = [
+                { price: 300000, downPayment: 20, rate: 6.5, income: 2500, taxes: 3600, insurance: 150 },
+                { price: 400000, downPayment: 20, rate: 7.0, income: 3000, taxes: 4800, insurance: 200 },
+                { price: 350000, downPayment: 20, rate: 6.8, income: 2800, taxes: 4200, insurance: 175 },
+                { price: 250000, downPayment: 25, rate: 6.2, income: 2100, taxes: 3000, insurance: 120 }
+            ];
+            const d = defaults[index - 1];
+
+            return `
+                <div id="analysis${index}" class="${analysisBgColors[index-1]} ${analysisBorderColors[index-1]} rounded-xl p-6">
+                    <h2 class="text-3xl font-semibold ${analysisTextColors[index-1]} mb-6 text-center">Analysis ${index}</h2>
+                    <div class="space-y-4">
+                        <div class="flex flex-col">
+                            <label for="address${index}" class="text-sm font-medium text-gray-700 mb-1">Property Address</label>
+                            <div class="flex items-center space-x-2">
+                                <input type="text" id="address${index}" placeholder="${analysisPlaceholder[index-1]}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]} flex-grow">
+                                <button id="mapBtn${index}" class="${analysisMapBtnBg[index-1]} text-white p-3 rounded-lg ${analysisMapBtnHoverBg[index-1]} transition-colors">Map</button>
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="price${index}" class="text-sm font-medium text-gray-700 mb-1">Purchase Price ($)</label>
+                            <input type="number" id="price${index}" value="${d.price}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="downPayment${index}" class="text-sm font-medium text-gray-700 mb-1">Down Payment (%)</label>
+                            <input type="number" id="downPayment${index}" value="${d.downPayment}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="rate${index}" class="text-sm font-medium text-gray-700 mb-1">Interest Rate (%)</label>
+                            <input type="number" id="rate${index}" value="${d.rate}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="term${index}" class="text-sm font-medium text-gray-700 mb-1">Loan Term (Years)</label>
+                            <input type="number" id="term${index}" value="30" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="income${index}" class="text-sm font-medium text-gray-700 mb-1">Gross Rental Income ($/mo)</label>
+                            <input type="number" id="income${index}" value="${d.income}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="vacancy${index}" class="text-sm font-medium text-gray-700 mb-1">Vacancy Rate (%)</label>
+                            <input type="number" id="vacancy${index}" value="5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="propertyManagement${index}" class="text-sm font-medium text-gray-700 mb-1">Property Management (%)</label>
+                            <input type="number" id="propertyManagement${index}" value="8" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="taxes${index}" class="text-sm font-medium text-gray-700 mb-1">Property Taxes ($/yr)</label>
+                            <input type="number" id="taxes${index}" value="${d.taxes}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="insurance${index}" class="text-sm font-medium text-gray-700 mb-1">Insurance ($/mo)</label>
+                            <input type="number" id="insurance${index}" value="${d.insurance}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="repairs${index}" class="text-sm font-medium text-gray-700 mb-1">Repairs & Maintenance ($/mo)</label>
+                            <input type="number" id="repairs${index}" value="100" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="capex${index}" class="text-sm font-medium text-gray-700 mb-1">Capital Expenditures ($/mo)</label>
+                            <input type="number" id="capex${index}" value="100" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Helper function to create a results section HTML string
+        function createResultSection(index) {
+            return `
+                <div id="result${index}" class="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                    <p class="text-xl font-bold mb-2">Analysis ${index}</p>
+                    <p id="monthlyPayment${index}" class="text-gray-600">Mortgage: -</p>
+                    <p id="cashFlow${index}" class="text-2xl font-bold mt-4">Cash Flow: -</p>
+                </div>
+            `;
+        }
+        
+        // Add listener for "Add Analysis" button
+        addAnalysisBtn.addEventListener('click', () => {
+            if (analysisCount < 4) {
+                analysisCount++;
+                analysisContainer.insertAdjacentHTML('beforeend', createAnalysisSection(analysisCount));
+                resultsGrid.insertAdjacentHTML('beforeend', createResultSection(analysisCount));
+            }
+            if (analysisCount === 4) {
+                addAnalysisBtn.disabled = true;
+                addAnalysisBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        });
+
+        // Event delegation for map buttons
+        analysisContainer.addEventListener('click', (e) => {
+            if (e.target.id.startsWith('mapBtn')) {
+                const index = e.target.id.replace('mapBtn', '');
+                const address = document.getElementById(`address${index}`).value;
+                if (address) {
+                    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank');
+                }
+            }
+        });
+
+        // Add listener for compare button
+        compareBtn.addEventListener('click', () => {
+            // Function to get a numeric value from an input field
+            const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
+
+            const cashFlows = [];
+            for (let i = 1; i <= analysisCount; i++) {
+                // Get values for each analysis
+                const price = getVal(`price${i}`);
+                const downPayment = getVal(`downPayment${i}`) / 100;
+                const rate = getVal(`rate${i}`) / 100 / 12;
+                const term = getVal(`term${i}`) * 12;
+                const income = getVal(`income${i}`);
+                const vacancy = getVal(`vacancy${i}`) / 100;
+                const propertyManagement = getVal(`propertyManagement${i}`) / 100;
+                const annualTaxes = getVal(`taxes${i}`);
+                const insurance = getVal(`insurance${i}`);
+                const repairs = getVal(`repairs${i}`);
+                const capex = getVal(`capex${i}`);
+
+                // Calculate mortgage payment
+                const loanAmount = price * (1 - downPayment);
+                let mortgage;
+                if (rate === 0) {
+                    mortgage = loanAmount / term;
+                } else {
+                    mortgage = loanAmount * (rate * Math.pow(1 + rate, term)) / (Math.pow(1 + rate, term) - 1);
+                }
+                mortgage = isNaN(mortgage) ? 0 : mortgage;
+
+                // Calculate total monthly expenses and cash flow
+                const totalExpenses = mortgage + (annualTaxes / 12) + insurance + (income * vacancy) + (income * propertyManagement) + repairs + capex;
+                const cashFlow = income - totalExpenses;
+                cashFlows.push(cashFlow);
+                
+                // Display results
+                document.getElementById(`monthlyPayment${i}`).textContent = `Monthly Mortgage: $${mortgage.toFixed(2)}`;
+                document.getElementById(`cashFlow${i}`).textContent = `Monthly Cash Flow: $${cashFlow.toFixed(2)}`;
+            }
+
+            // Highlight the winner
+            const winnerValue = Math.max(...cashFlows);
+            const winnerIndex = cashFlows.indexOf(winnerValue);
+
+            for (let i = 1; i <= analysisCount; i++) {
+                const resultDiv = document.getElementById(`result${i}`);
+                resultDiv.className = 'bg-gray-50 border border-gray-200 rounded-xl p-6';
+                if (i - 1 === winnerIndex) {
+                    resultDiv.classList.add(`bg-${analysisColors[i - 1].slice(1)}-100`, `border-${analysisColors[i - 1].slice(1)}-500`, 'ring-2', `ring-${analysisColors[i - 1].slice(1)}-500`);
+                }
+            }
+
+            const winnerText = document.getElementById('winner');
+            if (winnerIndex !== -1) {
+                winnerText.textContent = `Analysis ${winnerIndex + 1} is the better option!`;
+                winnerText.className = `mt-8 text-center text-2xl font-bold text-${analysisColors[winnerIndex].slice(1)}-600`;
+            } else {
+                winnerText.textContent = 'Please enter values to compare.';
+                winnerText.className = 'mt-8 text-center text-2xl font-bold text-gray-600';
+            }
+
+            // Draw the comparison chart
+            drawChart(cashFlows);
+        });
+        
+        // Add listener for share button
+        shareBtn.addEventListener('click', () => {
+            const url = window.location.href;
+            
+            try {
+                // Create a temporary input element to copy the text
+                const tempInput = document.createElement('textarea');
+                tempInput.value = url;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+
+                copyMessageEl.textContent = 'Link copied to clipboard!';
+                copyMessageEl.classList.remove('hidden');
+                setTimeout(() => copyMessageEl.classList.add('hidden'), 3000);
+            } catch (err) {
+                copyMessageEl.textContent = 'Failed to copy link. Please copy manually.';
+                copyMessageEl.classList.remove('hidden');
+                setTimeout(() => copyMessageEl.classList.add('hidden'), 3000);
+            }
+        });
+
+        // Function to draw the bar chart
+        function drawChart(values) {
+            const canvas = document.getElementById('cashFlowChart');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear the canvas for redrawing
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (values.length === 0) return;
+            
+            const maxValue = Math.max(...values.map(Math.abs)) || 1;
+            const barWidth = 80;
+            const barSpacing = 40;
+            const chartAreaWidth = (barWidth + barSpacing) * values.length - barSpacing;
+            const padding = 20;
+
+            const xOffset = (canvas.width - chartAreaWidth) / 2;
+            const yOffset = canvas.height - padding;
+
+            // Draw X and Y axis (optional but good for context)
+            ctx.strokeStyle = '#9ca3af';
+            ctx.beginPath();
+            ctx.moveTo(xOffset - barSpacing / 2, yOffset);
+            ctx.lineTo(xOffset + chartAreaWidth + barSpacing / 2, yOffset);
+            ctx.stroke();
+
+            // Draw bars
+            let currentX = xOffset;
+            for (let i = 0; i < values.length; i++) {
+                const value = values[i];
+                const label = `Analysis ${i + 1}`;
+                const color = analysisColors[i];
+                const bgColor = `#${color.slice(1)}10`; // Light background color
+
+                drawBar(ctx, currentX, yOffset, barWidth, value, maxValue, label, color, bgColor);
+                currentX += barWidth + barSpacing;
+            }
+        }
+
+        // Helper function to draw a single bar
+        function drawBar(ctx, x, y, width, value, maxValue, label, color, bgColor) {
+            const height = (value / maxValue) * (ctx.canvas.height - 2 * 20) || 0; // 20 is padding
+            const barY = y - height;
+
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(x, 0, width, ctx.canvas.height);
+
+            ctx.fillStyle = color;
+            ctx.fillRect(x, barY, width, height);
+
+            ctx.fillStyle = '#1f2937';
+            ctx.font = '16px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, x + width / 2, y + 20);
+
+            ctx.font = '14px Inter';
+            ctx.fillText(`$${value.toFixed(2)}`, x + width / 2, barY - 10);
+        }
+    </script>
+</body>
+</html>
