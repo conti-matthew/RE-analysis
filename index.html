@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -111,14 +112,29 @@
                 <div id="result1" class="bg-gray-50 border border-gray-200 rounded-xl p-6">
                     <p class="text-xl font-bold mb-2">Analysis 1</p>
                     <p id="monthlyPayment1" class="text-gray-600">Mortgage: -</p>
-                    <p id="cashFlow1" class="text-2xl font-bold mt-4">Cash Flow: -</p>
+                    <p class="text-lg font-bold mt-4 text-gray-800">Monthly Cash Flow</p>
+                    <p id="cashFlow1" class="text-2xl font-bold text-green-600"> - </p>
+                    <p class="text-lg font-bold mt-4 text-gray-800">Cap Rate</p>
+                    <p id="capRate1" class="text-2xl font-bold text-blue-600"> - </p>
+                    <p class="text-lg font-bold mt-4 text-gray-800">Cash-on-Cash</p>
+                    <p id="cashOnCash1" class="text-2xl font-bold text-purple-600"> - </p>
                 </div>
             </div>
             <div id="winner" class="mt-8 text-center text-2xl font-bold"></div>
+
             <!-- Graph section for comparison -->
-            <div class="mt-8">
-                <h4 class="text-2xl font-semibold text-center text-gray-700 mb-4">Cash Flow Comparison</h4>
-                <canvas id="cashFlowChart"></canvas>
+            <div class="mt-12">
+                <div class="flex items-center justify-center space-x-4 mb-4">
+                    <h4 class="text-2xl font-semibold text-gray-700">Comparison Chart</h4>
+                    <select id="chartMetric" class="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="cashFlow">Monthly Cash Flow</option>
+                        <option value="capRate">Cap Rate</option>
+                        <option value="cashOnCash">Cash-on-Cash Return</option>
+                    </select>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-inner">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -129,6 +145,7 @@
         const addAnalysisBtn = document.getElementById('addAnalysisBtn');
         const compareBtn = document.getElementById('compareBtn');
         const shareBtn = document.getElementById('shareBtn');
+        const chartMetricSelector = document.getElementById('chartMetric');
         const copyMessageEl = document.getElementById('copy-message');
 
         let analysisCount = 1;
@@ -145,6 +162,8 @@
         const analysisRingColors = ['focus:ring-blue-500', 'focus:ring-green-500', 'focus:ring-purple-500', 'focus:ring-yellow-500'];
         const analysisMapBtnBg = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500'];
         const analysisMapBtnHoverBg = ['hover:bg-blue-600', 'hover:bg-green-600', 'hover:bg-purple-600', 'hover:bg-yellow-600'];
+
+        let myChart = null; // Variable to hold the Chart.js instance
 
         // Helper function to create an analysis section HTML string
         function createAnalysisSection(index) {
@@ -222,7 +241,12 @@
                 <div id="result${index}" class="bg-gray-50 border border-gray-200 rounded-xl p-6">
                     <p class="text-xl font-bold mb-2">Analysis ${index}</p>
                     <p id="monthlyPayment${index}" class="text-gray-600">Mortgage: -</p>
-                    <p id="cashFlow${index}" class="text-2xl font-bold mt-4">Cash Flow: -</p>
+                    <p class="text-lg font-bold mt-4 text-gray-800">Monthly Cash Flow</p>
+                    <p id="cashFlow${index}" class="text-2xl font-bold text-green-600"> - </p>
+                    <p class="text-lg font-bold mt-4 text-gray-800">Cap Rate</p>
+                    <p id="capRate${index}" class="text-2xl font-bold text-blue-600"> - </p>
+                    <p class="text-lg font-bold mt-4 text-gray-800">Cash-on-Cash</p>
+                    <p id="cashOnCash${index}" class="text-2xl font-bold text-purple-600"> - </p>
                 </div>
             `;
         }
@@ -250,13 +274,24 @@
                 }
             }
         });
+        
+        const calculatedResults = {
+            cashFlows: [],
+            capRates: [],
+            cashOnCash: [],
+            labels: []
+        };
 
         // Add listener for compare button
         compareBtn.addEventListener('click', () => {
             // Function to get a numeric value from an input field
             const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
 
-            const cashFlows = [];
+            calculatedResults.cashFlows = [];
+            calculatedResults.capRates = [];
+            calculatedResults.cashOnCash = [];
+            calculatedResults.labels = [];
+
             for (let i = 1; i <= analysisCount; i++) {
                 // Get values for each analysis
                 const price = getVal(`price${i}`);
@@ -284,36 +319,57 @@
                 // Calculate total monthly expenses and cash flow
                 const totalExpenses = mortgage + (annualTaxes / 12) + insurance + (income * vacancy) + (income * propertyManagement) + repairs + capex;
                 const cashFlow = income - totalExpenses;
-                cashFlows.push(cashFlow);
                 
+                // Calculate Cap Rate and Cash-on-Cash Return
+                const annualGrossIncome = income * 12;
+                const annualOperatingExpenses = (annualTaxes) + (insurance * 12) + (income * vacancy * 12) + (income * propertyManagement * 12) + (repairs * 12) + (capex * 12);
+                const noi = annualGrossIncome - annualOperatingExpenses;
+                const capRate = (noi / price) * 100;
+                const annualCashFlow = cashFlow * 12;
+                const totalCashInvested = price * downPayment;
+                const cashOnCash = (annualCashFlow / totalCashInvested) * 100;
+
+                // Store results for chart
+                calculatedResults.cashFlows.push(cashFlow);
+                calculatedResults.capRates.push(capRate);
+                calculatedResults.cashOnCash.push(cashOnCash);
+                calculatedResults.labels.push(`Analysis ${i}`);
+
                 // Display results
-                document.getElementById(`monthlyPayment${i}`).textContent = `Monthly Mortgage: $${mortgage.toFixed(2)}`;
-                document.getElementById(`cashFlow${i}`).textContent = `Monthly Cash Flow: $${cashFlow.toFixed(2)}`;
+                document.getElementById(`monthlyPayment${i}`).textContent = `Mortgage: $${mortgage.toFixed(2)}`;
+                document.getElementById(`cashFlow${i}`).textContent = `$${cashFlow.toFixed(2)}`;
+                document.getElementById(`capRate${i}`).textContent = `${capRate.toFixed(2)}%`;
+                document.getElementById(`cashOnCash${i}`).textContent = `${cashOnCash.toFixed(2)}%`;
             }
 
-            // Highlight the winner
-            const winnerValue = Math.max(...cashFlows);
-            const winnerIndex = cashFlows.indexOf(winnerValue);
+            // Highlight the winner based on cash flow
+            const winnerValue = Math.max(...calculatedResults.cashFlows);
+            const winnerIndex = calculatedResults.cashFlows.indexOf(winnerValue);
 
             for (let i = 1; i <= analysisCount; i++) {
                 const resultDiv = document.getElementById(`result${i}`);
                 resultDiv.className = 'bg-gray-50 border border-gray-200 rounded-xl p-6';
                 if (i - 1 === winnerIndex) {
-                    resultDiv.classList.add(`bg-${analysisColors[i - 1].slice(1)}-100`, `border-${analysisColors[i - 1].slice(1)}-500`, 'ring-2', `ring-${analysisColors[i - 1].slice(1)}-500`);
+                    resultDiv.classList.add(`ring-4`, `ring-${analysisColors[i - 1].slice(1)}-500`);
                 }
             }
 
             const winnerText = document.getElementById('winner');
             if (winnerIndex !== -1) {
-                winnerText.textContent = `Analysis ${winnerIndex + 1} is the better option!`;
+                winnerText.textContent = `Analysis ${winnerIndex + 1} is the better option based on monthly cash flow!`;
                 winnerText.className = `mt-8 text-center text-2xl font-bold text-${analysisColors[winnerIndex].slice(1)}-600`;
             } else {
                 winnerText.textContent = 'Please enter values to compare.';
                 winnerText.className = 'mt-8 text-center text-2xl font-bold text-gray-600';
             }
 
-            // Draw the comparison chart
-            drawChart(cashFlows);
+            // Draw the comparison chart based on the selected metric
+            drawChart(chartMetricSelector.value);
+        });
+
+        // Event listener for the metric selector dropdown
+        chartMetricSelector.addEventListener('change', (e) => {
+            drawChart(e.target.value);
         });
         
         // Add listener for share button
@@ -339,63 +395,101 @@
             }
         });
 
-        // Function to draw the bar chart
-        function drawChart(values) {
-            const canvas = document.getElementById('cashFlowChart');
-            const ctx = canvas.getContext('2d');
+        // Function to draw the bar chart using Chart.js
+        function drawChart(metric) {
+            const chartData = {
+                'cashFlow': {
+                    label: 'Monthly Cash Flow',
+                    data: calculatedResults.cashFlows,
+                    unit: '$',
+                    title: 'Monthly Cash Flow Comparison'
+                },
+                'capRate': {
+                    label: 'Cap Rate',
+                    data: calculatedResults.capRates,
+                    unit: '%',
+                    title: 'Capitalization Rate Comparison'
+                },
+                'cashOnCash': {
+                    label: 'Cash-on-Cash Return',
+                    data: calculatedResults.cashOnCash,
+                    unit: '%',
+                    title: 'Cash-on-Cash Return Comparison'
+                }
+            };
             
-            // Clear the canvas for redrawing
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const selectedMetric = chartData[metric];
 
-            if (values.length === 0) return;
-            
-            const maxValue = Math.max(...values.map(Math.abs)) || 1;
-            const barWidth = 80;
-            const barSpacing = 40;
-            const chartAreaWidth = (barWidth + barSpacing) * values.length - barSpacing;
-            const padding = 20;
-
-            const xOffset = (canvas.width - chartAreaWidth) / 2;
-            const yOffset = canvas.height - padding;
-
-            // Draw X and Y axis (optional but good for context)
-            ctx.strokeStyle = '#9ca3af';
-            ctx.beginPath();
-            ctx.moveTo(xOffset - barSpacing / 2, yOffset);
-            ctx.lineTo(xOffset + chartAreaWidth + barSpacing / 2, yOffset);
-            ctx.stroke();
-
-            // Draw bars
-            let currentX = xOffset;
-            for (let i = 0; i < values.length; i++) {
-                const value = values[i];
-                const label = `Analysis ${i + 1}`;
-                const color = analysisColors[i];
-                const bgColor = `#${color.slice(1)}10`; // Light background color
-
-                drawBar(ctx, currentX, yOffset, barWidth, value, maxValue, label, color, bgColor);
-                currentX += barWidth + barSpacing;
+            if (myChart) {
+                myChart.destroy();
             }
-        }
 
-        // Helper function to draw a single bar
-        function drawBar(ctx, x, y, width, value, maxValue, label, color, bgColor) {
-            const height = (value / maxValue) * (ctx.canvas.height - 2 * 20) || 0; // 20 is padding
-            const barY = y - height;
-
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(x, 0, width, ctx.canvas.height);
-
-            ctx.fillStyle = color;
-            ctx.fillRect(x, barY, width, height);
-
-            ctx.fillStyle = '#1f2937';
-            ctx.font = '16px Inter';
-            ctx.textAlign = 'center';
-            ctx.fillText(label, x + width / 2, y + 20);
-
-            ctx.font = '14px Inter';
-            ctx.fillText(`$${value.toFixed(2)}`, x + width / 2, barY - 10);
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: calculatedResults.labels,
+                    datasets: [{
+                        label: selectedMetric.label,
+                        data: selectedMetric.data,
+                        backgroundColor: analysisColors,
+                        borderColor: analysisColors.map(color => color),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: selectedMetric.label,
+                                font: {
+                                    size: 16
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return selectedMetric.unit === '%' ? value + '%' : `$${value.toFixed(2)}`;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: selectedMetric.title,
+                            font: {
+                                size: 20,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 30
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += selectedMetric.unit === '%' ? `${context.parsed.y.toFixed(2)}%` : `$${context.parsed.y.toFixed(2)}`;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>
