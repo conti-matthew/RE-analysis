@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate Investment Calculator 2.0</title>
+    <title>Real Estate Investment Calculator</title>
     <!-- Tailwind CSS for a modern, responsive design -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -83,7 +83,7 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div class="container bg-white shadow-xl rounded-2xl p-8 lg:p-12">
-        <h1 class="text-4xl lg:text-5xl font-bold text-center mb-6 text-gray-800">Real Estate Investment Calculator 2.0</h1>
+        <h1 class="text-4xl lg:text-5xl font-bold text-center mb-6 text-gray-800">Real Estate Investment Calculator</h1>
         <p class="text-center text-gray-600 mb-10">Compare up to four properties side-by-side to find the best deal.</p>
 
         <!-- Main content grid -->
@@ -106,87 +106,85 @@
                         <div class="space-y-4">
                             <div class="flex flex-col">
                                 <label for="address1" class="text-sm font-medium text-gray-700 mb-1">Property Address</label>
-                                <div class="flex items-center space-x-2">
-                                    <input type="text" id="address1" placeholder="e.g., 123 Main St, Anytown" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 flex-grow">
-                                    <button id="mapBtn1" class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors">Map</button>
-                                </div>
+                                <input type="text" id="address1" placeholder="e.g., 123 Main St, Anytown" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
+                                <button id="mapBtn1" class="mt-2 bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors w-full">Map</button>
                             </div>
                             <div class="flex flex-col">
                                 <label for="price1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Purchase Price ($)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Purchase Price">?</button>
                                 </label>
-                                <input type="number" id="price1" value="300000" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="price1" value="300000" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="downPayment1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Down Payment (%)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Down Payment">?</button>
                                 </label>
-                                <input type="number" id="downPayment1" value="20" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="downPayment1" value="20" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="rate1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Interest Rate (%)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Interest Rate">?</button>
                                 </label>
-                                <input type="number" id="rate1" value="6.5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="rate1" value="6.5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="term1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Loan Term (Years)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Loan Term">?</button>
                                 </label>
-                                <input type="number" id="term1" value="30" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="term1" value="30" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="income1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Gross Rental Income ($/mo)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Gross Rental Income">?</button>
                                 </label>
-                                <input type="number" id="income1" value="2500" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="income1" value="2500" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="vacancy1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Vacancy Rate (%)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Vacancy Rate">?</button>
                                 </label>
-                                <input type="number" id="vacancy1" value="5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="vacancy1" value="5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="propertyManagement1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Property Management (%)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Management">?</button>
                                 </label>
-                                <input type="number" id="propertyManagement1" value="8" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="propertyManagement1" value="8" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="taxes1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Property Taxes ($/yr)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Taxes">?</button>
                                 </label>
-                                <input type="number" id="taxes1" value="3600" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="taxes1" value="3600" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="insurance1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Insurance ($/mo)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Insurance">?</button>
                                 </label>
-                                <input type="number" id="insurance1" value="150" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="insurance1" value="150" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="repairs1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Repairs & Maintenance ($/mo)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Repairs & Maintenance">?</button>
                                 </label>
-                                <input type="number" id="repairs1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="repairs1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                             <div class="flex flex-col">
                                 <label for="capex1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                     Capital Expenditures ($/mo)
                                     <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Capital Expenditures">?</button>
                                 </label>
-                                <input type="number" id="capex1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="number" id="capex1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                             </div>
                         </div>
                     </div>
@@ -389,87 +387,85 @@
                     <div class="space-y-4">
                         <div class="flex flex-col">
                             <label for="address${index}" class="text-sm font-medium text-gray-700 mb-1">Property Address</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="text" id="address${index}" placeholder="${analysisPlaceholder[index-1]}" value="${d.address}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]} flex-grow">
-                                <button id="mapBtn${index}" class="${analysisMapBtnBg[index-1]} text-white p-3 rounded-lg ${analysisMapBtnHoverBg[index-1]} transition-colors">Map</button>
-                            </div>
+                            <input type="text" id="address${index}" placeholder="${analysisPlaceholder[index-1]}" value="${d.address}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]} w-full">
+                            <button id="mapBtn${index}" class="mt-2 ${analysisMapBtnBg[index-1]} text-white p-3 rounded-lg ${analysisMapBtnHoverBg[index-1]} transition-colors w-full">Map</button>
                         </div>
                         <div class="flex flex-col">
                             <label for="price${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Purchase Price ($)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Purchase Price">?</button>
                             </label>
-                            <input type="number" id="price${index}" value="${d.price}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="price${index}" value="${d.price}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="downPayment${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Down Payment (%)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Down Payment">?</button>
                             </label>
-                            <input type="number" id="downPayment${index}" value="${d.downPayment}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="downPayment${index}" value="${d.downPayment}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="rate${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Interest Rate (%)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Interest Rate">?</button>
                             </label>
-                            <input type="number" id="rate${index}" value="${d.rate}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="rate${index}" value="${d.rate}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="term${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Loan Term (Years)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Loan Term">?</button>
                             </label>
-                            <input type="number" id="term${index}" value="${d.term}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="term${index}" value="${d.term}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="income${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Gross Rental Income ($/mo)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Gross Rental Income">?</button>
                             </label>
-                            <input type="number" id="income${index}" value="${d.income}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="income${index}" value="${d.income}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="vacancy${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Vacancy Rate (%)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Vacancy Rate">?</button>
                             </label>
-                            <input type="number" id="vacancy${index}" value="${d.vacancy}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="vacancy${index}" value="${d.vacancy}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="propertyManagement${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Property Management (%)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Management">?</button>
                             </label>
-                            <input type="number" id="propertyManagement${index}" value="${d.propertyManagement}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="propertyManagement${index}" value="${d.propertyManagement}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="taxes${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Property Taxes ($/yr)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Taxes">?</button>
                             </label>
-                            <input type="number" id="taxes${index}" value="${d.taxes}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="taxes${index}" value="${d.taxes}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="insurance${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Insurance ($/mo)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Insurance">?</button>
                             </label>
-                            <input type="number" id="insurance${index}" value="${d.insurance}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="insurance${index}" value="${d.insurance}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="repairs${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Repairs & Maintenance ($/mo)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Repairs & Maintenance">?</button>
                             </label>
-                            <input type="number" id="repairs${index}" value="${d.repairs}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="repairs${index}" value="${d.repairs}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                         <div class="flex flex-col">
                             <label for="capex${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Capital Expenditures ($/mo)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Capital Expenditures">?</button>
                             </label>
-                            <input type="number" id="capex${index}" value="${d.capex}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" id="capex${index}" value="${d.capex}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">
                         </div>
                     </div>
                 </div>
@@ -542,23 +538,27 @@
                 analysisEl.className = `${analysisBgColors[i]} ${analysisBorderColors[i]} rounded-xl p-6`;
                 analysisEl.querySelector('h3').innerHTML = `Analysis ${newIndex} <button class="close-analysis-btn text-gray-400 hover:text-red-500 transition-colors" data-index="${newIndex}"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>`;
                 analysisEl.querySelector('h3').className = `text-2xl font-bold ${analysisTextColors[i]} mb-4 flex justify-between items-center`;
+                
                 const inputs = analysisEl.querySelectorAll('input');
                 inputs.forEach(input => {
                     const oldId = input.id;
                     const newId = oldId.replace(/\d+$/, newIndex);
                     input.id = newId;
                     input.placeholder = analysisPlaceholder[i];
-                    input.className = `deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[i]} ${analysisBorderColors[i]}`;
+                    input.className = `deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[i]} ${analysisBorderColors[i]} w-full`;
                 });
+                
                 const labels = analysisEl.querySelectorAll('label');
                 labels.forEach(label => {
                     const oldFor = label.htmlFor;
                     const newFor = oldFor.replace(/\d+$/, newIndex);
                     label.htmlFor = newFor;
                 });
+                
                 const mapBtn = analysisEl.querySelector('[id^="mapBtn"]');
                 if (mapBtn) {
                      mapBtn.id = `mapBtn${newIndex}`;
+                     mapBtn.className = `mt-2 ${analysisMapBtnBg[i]} text-white p-3 rounded-lg ${analysisMapBtnHoverBg[i]} transition-colors w-full`;
                 }
                 
                 resultEl.id = `result${newIndex}`;
@@ -573,7 +573,7 @@
             let recommendation = { text: '', style: '' };
 
             if (monthlyCashFlow > 200 && capRate > 0.07 && cashOnCashReturn > 0.12) {
-                recommendation.text = 'Excellent Deal! Highly Recommended! 🚀';
+                recommendation.text = 'Excellent Deal! Highly Recommended! �';
                 recommendation.style = 'bg-green-600';
             } else if (monthlyCashFlow > 50 && capRate > 0.05 && cashOnCashReturn > 0.08) {
                 recommendation.text = 'Good Potential. Worth Considering. 👍';
@@ -700,15 +700,40 @@
                        chartMetric === 'capRate' ? 'Cap Rate (%)' :
                        'Cash-on-Cash Return (%)',
                 data: data,
-                backgroundColor: analysisColors.slice(0, analysisCount),
+                backgroundColor: analysisColors.slice(0, analysisCount).map(color => `${color}80`), // Add transparency
                 borderColor: analysisColors.slice(0, analysisCount),
-                borderWidth: 1,
+                borderWidth: 2, // Thicker border for better visibility
             }];
 
             if (myChart) {
                 myChart.destroy();
             }
 
+            const chartOptions = {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: {
+                        display: true,
+                        text: 'Investment Comparison',
+                        font: { size: 18, weight: 'bold', family: 'Inter, sans-serif' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: { family: 'Inter, sans-serif' }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { family: 'Inter, sans-serif' }
+                        }
+                    }
+                }
+            };
+            
             if (chartType === 'pie') {
                 myChart = new Chart(ctx, {
                     type: chartType,
@@ -722,8 +747,12 @@
                             legend: { position: 'top' },
                             title: {
                                 display: true,
-                                text: 'Investment Comparison'
+                                text: 'Investment Comparison',
+                                font: { size: 18, weight: 'bold', family: 'Inter, sans-serif' }
                             }
+                        },
+                        layout: {
+                            padding: 20
                         }
                     }
                 });
@@ -734,14 +763,7 @@
                         labels: labels,
                         datasets: datasets,
                     },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                            },
-                        },
-                    },
+                    options: chartOptions,
                 });
             }
         }
@@ -868,13 +890,13 @@
                     datasets: [{
                         data: expenseValues,
                         backgroundColor: [
-                            'rgba(255, 99, 132, 0.8)',
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(255, 206, 86, 0.8)',
-                            'rgba(75, 192, 192, 0.8)',
-                            'rgba(153, 102, 255, 0.8)',
-                            'rgba(255, 159, 64, 0.8)',
-                            'rgba(25, 25, 112, 0.8)'
+                            '#eab308', // yellow
+                            '#3b82f6', // blue
+                            '#a855f7', // purple
+                            '#22c55e', // green
+                            '#f97316', // orange
+                            '#ef4444', // red
+                            '#6b7280' // gray
                         ],
                         hoverOffset: 4
                     }]
@@ -883,7 +905,11 @@
                     responsive: true,
                     plugins: {
                         legend: { position: 'top' },
-                        title: { display: true, text: `Analysis ${index} Monthly Expenses` }
+                        title: { 
+                            display: true, 
+                            text: `Analysis ${index} Monthly Expenses`,
+                            font: { size: 18, weight: 'bold', family: 'Inter, sans-serif' }
+                        }
                     }
                 }
             });
@@ -1079,3 +1105,4 @@
     </script>
 </body>
 </html>
+�
