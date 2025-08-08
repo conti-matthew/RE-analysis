@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate Investment Calculator</title>
+    <title>Real Estate Investment Calculator 2.0</title>
+    <!-- Tailwind CSS for a modern, responsive design -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2canvas for capturing a screenshot -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         body {
@@ -16,14 +19,14 @@
             background-color: #f3f4f6;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
         canvas {
             width: 100% !important;
             height: 300px !important;
         }
-        /* Style for the modal */
+        /* Modal styling for all pop-ups */
         .modal {
             display: none; /* Hidden by default */
             position: fixed;
@@ -32,17 +35,16 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0,0,0,0.5);
             justify-content: center;
             align-items: center;
+            padding: 1rem;
         }
         .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
+            background-color: #ffffff;
+            padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             max-width: 90%;
             max-height: 90%;
             overflow-y: auto;
@@ -50,17 +52,16 @@
         }
         .modal-close {
             position: absolute;
-            top: 10px;
-            right: 25px;
-            color: #aaa;
-            font-size: 28px;
+            top: 1rem;
+            right: 1.5rem;
+            color: #9ca3af;
+            font-size: 2rem;
             font-weight: bold;
-        }
-        .modal-close:hover,
-        .modal-close:focus {
-            color: black;
-            text-decoration: none;
             cursor: pointer;
+            transition: color 0.2s;
+        }
+        .modal-close:hover {
+            color: #1f2937;
         }
         .loading-overlay {
             display: none;
@@ -82,200 +83,217 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div class="container bg-white shadow-xl rounded-2xl p-8 lg:p-12">
-        <h1 class="text-4xl lg:text-5xl font-bold text-center mb-10 text-gray-800">Real Estate Investment Calculator</h1>
+        <h1 class="text-4xl lg:text-5xl font-bold text-center mb-6 text-gray-800">Real Estate Investment Calculator 2.0</h1>
+        <p class="text-center text-gray-600 mb-10">Compare up to four properties side-by-side to find the best deal.</p>
 
-        <div id="analysis-container" class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            <div id="analysis1" class="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                <h2 class="text-3xl font-semibold text-blue-800 mb-6 text-center flex justify-between items-center">
-                    Analysis 1
-                    <button class="close-analysis-btn text-gray-400 hover:text-red-500 transition-colors" data-index="1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>
-                </h2>
-                <div class="space-y-4">
-                    <div class="flex flex-col">
-                        <label for="address1" class="text-sm font-medium text-gray-700 mb-1">Property Address</label>
-                        <div class="flex items-center space-x-2">
-                            <input type="text" id="address1" placeholder="e.g., 123 Main St, Anytown" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 flex-grow">
-                            <button id="mapBtn1" class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors">Map</button>
+        <!-- Main content grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12">
+
+            <!-- Input and controls section -->
+            <div>
+                <h2 class="text-3xl font-semibold text-gray-800 mb-6">Property Details</h2>
+                <div id="analysis-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Initial Analysis 1 Section -->
+                    <div id="analysis1" class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                        <h3 class="text-2xl font-bold text-blue-800 mb-4 flex justify-between items-center">
+                            Analysis 1
+                            <button class="close-analysis-btn text-gray-400 hover:text-red-500 transition-colors" data-index="1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex flex-col">
+                                <label for="address1" class="text-sm font-medium text-gray-700 mb-1">Property Address</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" id="address1" placeholder="e.g., 123 Main St, Anytown" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 flex-grow">
+                                    <button id="mapBtn1" class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition-colors">Map</button>
+                                </div>
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="price1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Purchase Price ($)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Purchase Price">?</button>
+                                </label>
+                                <input type="number" id="price1" value="300000" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="downPayment1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Down Payment (%)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Down Payment">?</button>
+                                </label>
+                                <input type="number" id="downPayment1" value="20" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="rate1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Interest Rate (%)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Interest Rate">?</button>
+                                </label>
+                                <input type="number" id="rate1" value="6.5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="term1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Loan Term (Years)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Loan Term">?</button>
+                                </label>
+                                <input type="number" id="term1" value="30" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="income1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Gross Rental Income ($/mo)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Gross Rental Income">?</button>
+                                </label>
+                                <input type="number" id="income1" value="2500" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="vacancy1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Vacancy Rate (%)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Vacancy Rate">?</button>
+                                </label>
+                                <input type="number" id="vacancy1" value="5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="propertyManagement1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Property Management (%)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Management">?</button>
+                                </label>
+                                <input type="number" id="propertyManagement1" value="8" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="taxes1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Property Taxes ($/yr)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Taxes">?</button>
+                                </label>
+                                <input type="number" id="taxes1" value="3600" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="insurance1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Insurance ($/mo)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Insurance">?</button>
+                                </label>
+                                <input type="number" id="insurance1" value="150" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="repairs1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Repairs & Maintenance ($/mo)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Repairs & Maintenance">?</button>
+                                </label>
+                                <input type="number" id="repairs1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="capex1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Capital Expenditures ($/mo)
+                                    <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Capital Expenditures">?</button>
+                                </label>
+                                <input type="number" id="capex1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
                         </div>
                     </div>
-                    <div class="flex flex-col">
-                        <label for="price1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Purchase Price ($)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Purchase Price">?</button>
-                        </label>
-                        <input type="number" id="price1" value="300000" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <!-- Results and Charts section -->
+            <div class="relative">
+                <h2 class="text-3xl font-semibold text-gray-800 mb-6">Comparison Results</h2>
+                <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Initial Result 1 Section -->
+                    <div id="result1" class="bg-gray-50 border border-gray-200 rounded-xl p-6 transition-all duration-300 ease-in-out">
+                        <p class="text-xl font-bold mb-2 text-gray-800">Analysis 1</p>
+                        <div id="recommendation1" class="hidden text-center font-bold text-sm mb-4 p-2 rounded-lg text-white"></div>
+                        <p id="monthlyPayment1" class="text-gray-600">Mortgage: -</p>
+                        <p class="text-lg font-bold mt-4 text-gray-800">Monthly Cash Flow</p>
+                        <p id="cashFlow1" class="text-2xl font-bold text-gray-700"> - </p>
+                        <p class="text-lg font-bold mt-4 text-gray-800">Cap Rate</p>
+                        <p id="capRate1" class="text-2xl font-bold text-gray-700"> - </p>
+                        <p class="text-lg font-bold mt-4 text-gray-800">Cash-on-Cash</p>
+                        <p id="cashOnCash1" class="text-2xl font-bold text-gray-700"> - </p>
+                        <button class="expense-breakdown-btn bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-full mt-4 hover:bg-gray-300 transition-colors" data-index="1">
+                            Expense Breakdown
+                        </button>
                     </div>
-                    <div class="flex flex-col">
-                        <label for="downPayment1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Down Payment (%)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Down Payment">?</button>
-                        </label>
-                        <input type="number" id="downPayment1" value="20" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div id="winner" class="mt-8 text-center text-2xl font-bold"></div>
+                
+                <!-- Graph section for comparison -->
+                <div class="mt-12">
+                    <h4 class="text-2xl font-semibold text-gray-700 mb-4">Comparison Chart</h4>
+                    <div class="flex items-center space-x-4 mb-6">
+                        <select id="chartType" class="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Chart</option>
+                            <option value="pie">Pie Chart</option>
+                        </select>
+                        <select id="chartMetric" class="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="cashFlow">Monthly Cash Flow</option>
+                            <option value="capRate">Cap Rate</option>
+                            <option value="cashOnCash">Cash-on-Cash Return</option>
+                        </select>
                     </div>
-                    <div class="flex flex-col">
-                        <label for="rate1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Interest Rate (%)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Interest Rate">?</button>
-                        </label>
-                        <input type="number" id="rate1" value="6.5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="term1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Loan Term (Years)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Loan Term">?</button>
-                        </label>
-                        <input type="number" id="term1" value="30" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="income1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Gross Rental Income ($/mo)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Gross Rental Income">?</button>
-                        </label>
-                        <input type="number" id="income1" value="2500" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="vacancy1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Vacancy Rate (%)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Vacancy Rate">?</button>
-                        </label>
-                        <input type="number" id="vacancy1" value="5" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="propertyManagement1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Property Management (%)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Management">?</button>
-                        </label>
-                        <input type="number" id="propertyManagement1" value="8" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="taxes1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Property Taxes ($/yr)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Taxes">?</button>
-                        </label>
-                        <input type="number" id="taxes1" value="3600" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="insurance1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Insurance ($/mo)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Insurance">?</button>
-                        </label>
-                        <input type="number" id="insurance1" value="150" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="repairs1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Repairs & Maintenance ($/mo)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Repairs & Maintenance">?</button>
-                        </label>
-                        <input type="number" id="repairs1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="capex1" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Capital Expenditures ($/mo)
-                            <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Capital Expenditures">?</button>
-                        </label>
-                        <input type="number" id="capex1" value="100" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-inner">
+                        <canvas id="comparisonChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="flex flex-col lg:flex-row items-center justify-center mt-10 space-y-4 lg:space-y-0 lg:space-x-4">
-            <button id="addAnalysisBtn" class="bg-indigo-600 text-white font-bold py-4 px-10 rounded-full shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        <!-- Buttons at the bottom -->
+        <div class="flex flex-wrap items-center justify-center mt-10 space-y-4 lg:space-y-0 lg:space-x-4">
+            <button id="addAnalysisBtn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 w-full md:w-auto">
                 Add Another Analysis
             </button>
-            <button id="saveAnalysesBtn" class="bg-yellow-500 text-white font-bold py-4 px-10 rounded-full shadow-lg hover:bg-yellow-600 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2">
+            <button id="saveAnalysesBtn" class="bg-yellow-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-yellow-600 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 w-full md:w-auto">
                 Save Analyses
             </button>
-            <button id="loadAnalysesBtn" class="bg-gray-200 text-gray-800 font-bold py-4 px-10 rounded-full shadow-lg hover:bg-gray-300 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
+            <button id="loadAnalysesBtn" class="bg-gray-200 text-gray-800 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-300 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 w-full md:w-auto">
                 Load Analyses
             </button>
-            <button id="printScreenBtn" class="bg-gray-200 text-gray-800 font-semibold py-4 px-10 rounded-full shadow-lg hover:bg-gray-300 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
+            <button id="printScreenBtn" class="bg-gray-200 text-gray-800 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-300 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 w-full md:w-auto">
                 Print Screen
             </button>
-            <button id="shareBtn" class="bg-gray-200 text-gray-800 font-semibold py-4 px-10 rounded-full shadow-lg hover:bg-gray-300 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
+            <button id="shareBtn" class="bg-gray-200 text-gray-800 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-300 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 w-full md:w-auto">
                 Share Link
             </button>
         </div>
         <div id="copy-message" class="mt-4 text-center text-sm text-gray-500 hidden">Link copied to clipboard!</div>
         <div id="save-message" class="mt-4 text-center text-sm text-gray-500 hidden"></div>
-
-
-        <div id="results" class="mt-12 space-y-6">
-            <h3 class="text-3xl font-semibold text-center text-gray-800">Comparison Results</h3>
-            <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                <div id="result1" class="bg-gray-50 border border-gray-200 rounded-xl p-6">
-                    <p class="text-xl font-bold mb-2">Analysis 1</p>
-                    <p id="monthlyPayment1" class="text-gray-600">Mortgage: -</p>
-                    <p class="text-lg font-bold mt-4 text-gray-800">Monthly Cash Flow</p>
-                    <p id="cashFlow1" class="text-2xl font-bold text-green-600"> - </p>
-                    <p class="text-lg font-bold mt-4 text-gray-800">Cap Rate</p>
-                    <p id="capRate1" class="text-2xl font-bold text-blue-600"> - </p>
-                    <p class="text-lg font-bold mt-4 text-gray-800">Cash-on-Cash</p>
-                    <p id="cashOnCash1" class="text-2xl font-bold text-purple-600"> - </p>
-                    <p id="recommendation1" class="text-base text-gray-700 mt-4 italic"></p>
-                    <button class="expense-breakdown-btn bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-full mt-4 hover:bg-gray-300 transition-colors" data-index="1">
-                        Expense Breakdown
-                    </button>
-                </div>
-            </div>
-            <div id="winner" class="mt-8 text-center text-2xl font-bold"></div>
-
-            <div class="mt-12">
-                <div class="flex items-center justify-center space-x-4 mb-4">
-                    <h4 class="text-2xl font-semibold text-gray-700">Comparison Chart</h4>
-                    <select id="chartType" class="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        <option value="bar">Bar Chart</option>
-                        <option value="line">Line Chart</option>
-                        <option value="pie">Pie Chart</option>
-                    </select>
-                    <select id="chartMetric" class="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        <option value="cashFlow">Monthly Cash Flow</option>
-                        <option value="capRate">Cap Rate</option>
-                        <option value="cashOnCash">Cash-on-Cash Return</option>
-                    </select>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-xl shadow-inner">
-                    <canvas id="comparisonChart"></canvas>
-                </div>
-            </div>
-        </div>
     </div>
 
+    <!-- Modal for the print screen image -->
     <div id="printScreenModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close">×</span>
-            <h3 class="text-2xl font-bold mb-4 text-center">Snapshot</h3>
+        <div class="modal-content text-center">
+            <span class="modal-close">&times;</span>
+            <h3 class="text-2xl font-bold mb-4">Snapshot</h3>
             <img id="printScreenImage" class="w-full h-auto rounded-lg shadow-lg">
-            <div class="text-center mt-6">
-                <button id="downloadBtn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+            <div class="mt-6">
+                 <button id="downloadBtn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     Download Image
                 </button>
             </div>
         </div>
     </div>
     
+    <!-- Modal for Expense Breakdown -->
     <div id="expenseBreakdownModal" class="modal">
         <div class="modal-content">
-            <span class="modal-close-expense-breakdown">×</span>
+            <span class="modal-close-expense-breakdown">&times;</span>
             <h3 class="text-2xl font-bold mb-4 text-center">Monthly Expense Breakdown</h3>
             <div class="bg-gray-50 p-6 rounded-xl shadow-inner">
-                <canvas id="expenseChart"></canvas>
+                 <canvas id="expenseChart"></canvas>
             </div>
         </div>
     </div>
 
+    <!-- Modal for Help/Tooltips -->
     <div id="helpModal" class="modal">
         <div class="modal-content">
-            <span class="modal-close-help">×</span>
+            <span class="modal-close-help">&times;</span>
             <h3 id="helpModalTitle" class="text-2xl font-bold mb-4 text-center">Help</h3>
             <p id="helpModalContent" class="text-gray-700"></p>
         </div>
     </div>
 
+    <!-- Loading overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <p>Generating snapshot...</p>
     </div>
@@ -356,23 +374,23 @@
                 { price: 350000, downPayment: 20, rate: 6.8, term: 30, income: 2800, vacancy: 5, propertyManagement: 8, taxes: 4200, insurance: 175, repairs: 100, capex: 100, address: '' },
                 { price: 250000, downPayment: 25, rate: 6.2, term: 30, income: 2100, vacancy: 5, propertyManagement: 8, taxes: 3000, insurance: 120, repairs: 100, capex: 100, address: '' }
             ];
-            const d = data.price ? data : defaults[index - 1] || defaults[0]; // Fallback to first default if index out of bounds
+            const d = data.price ? data : defaults[index - 1];
 
             return `
                 <div id="analysis${index}" class="${analysisBgColors[index-1]} ${analysisBorderColors[index-1]} rounded-xl p-6">
-                    <h2 class="text-3xl font-semibold ${analysisTextColors[index-1]} mb-6 text-center flex justify-between items-center">
+                    <h3 class="text-2xl font-bold ${analysisTextColors[index-1]} mb-4 flex justify-between items-center">
                         Analysis ${index}
                         <button class="close-analysis-btn text-gray-400 hover:text-red-500 transition-colors" data-index="${index}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                         </button>
-                    </h2>
+                    </h3>
                     <div class="space-y-4">
                         <div class="flex flex-col">
                             <label for="address${index}" class="text-sm font-medium text-gray-700 mb-1">Property Address</label>
                             <div class="flex items-center space-x-2">
-                                <input type="text" id="address${index}" placeholder="${analysisPlaceholder[index-1] || analysisPlaceholder[0]}" value="${d.address}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]} flex-grow">
+                                <input type="text" id="address${index}" placeholder="${analysisPlaceholder[index-1]}" value="${d.address}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]} flex-grow">
                                 <button id="mapBtn${index}" class="${analysisMapBtnBg[index-1]} text-white p-3 rounded-lg ${analysisMapBtnHoverBg[index-1]} transition-colors">Map</button>
                             </div>
                         </div>
@@ -381,77 +399,77 @@
                                 Purchase Price ($)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Purchase Price">?</button>
                             </label>
-                            <input type="number" id="price${index}" value="${d.price}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="price${index}" value="${d.price}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="downPayment${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Down Payment (%)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Down Payment">?</button>
                             </label>
-                            <input type="number" id="downPayment${index}" value="${d.downPayment}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="downPayment${index}" value="${d.downPayment}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="rate${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Interest Rate (%)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Interest Rate">?</button>
                             </label>
-                            <input type="number" id="rate${index}" value="${d.rate}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="rate${index}" value="${d.rate}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="term${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Loan Term (Years)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Loan Term">?</button>
                             </label>
-                            <input type="number" id="term${index}" value="${d.term}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="term${index}" value="${d.term}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="income${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Gross Rental Income ($/mo)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Gross Rental Income">?</button>
                             </label>
-                            <input type="number" id="income${index}" value="${d.income}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="income${index}" value="${d.income}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="vacancy${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Vacancy Rate (%)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Vacancy Rate">?</button>
                             </label>
-                            <input type="number" id="vacancy${index}" value="${d.vacancy}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="vacancy${index}" value="${d.vacancy}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="propertyManagement${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Property Management (%)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Management">?</button>
                             </label>
-                            <input type="number" id="propertyManagement${index}" value="${d.propertyManagement}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="propertyManagement${index}" value="${d.propertyManagement}" step="0.1" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="taxes${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Property Taxes ($/yr)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Property Taxes">?</button>
                             </label>
-                            <input type="number" id="taxes${index}" value="${d.taxes}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="taxes${index}" value="${d.taxes}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="insurance${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Insurance ($/mo)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Insurance">?</button>
                             </label>
-                            <input type="number" id="insurance${index}" value="${d.insurance}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="insurance${index}" value="${d.insurance}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="repairs${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Repairs & Maintenance ($/mo)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Repairs & Maintenance">?</button>
                             </label>
-                            <input type="number" id="repairs${index}" value="${d.repairs}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="repairs${index}" value="${d.repairs}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex flex-col">
                             <label for="capex${index}" class="text-sm font-medium text-gray-700 mb-1 flex items-center">
                                 Capital Expenditures ($/mo)
                                 <button class="help-btn ml-2 text-gray-400 hover:text-blue-500 transition-colors" data-term="Capital Expenditures">?</button>
                             </label>
-                            <input type="number" id="capex${index}" value="${d.capex}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]}">
+                            <input type="number" id="capex${index}" value="${d.capex}" class="deal-input p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                     </div>
                 </div>
@@ -460,751 +478,603 @@
 
         // Helper function to create a result section HTML string
         function createResultSection(index) {
-            const resultDiv = document.createElement('div');
-            resultDiv.id = `result${index}`;
-            resultDiv.classList.add('bg-gray-50', 'border', 'border-gray-200', 'rounded-xl', 'p-6');
-            resultDiv.innerHTML = `
-                <p class="text-xl font-bold mb-2">Analysis ${index}</p>
-                <p id="monthlyPayment${index}" class="text-gray-600">Mortgage: -</p>
-                <p class="text-lg font-bold mt-4 text-gray-800">Monthly Cash Flow</p>
-                <p id="cashFlow${index}" class="text-2xl font-bold text-green-600"> - </p>
-                <p class="text-lg font-bold mt-4 text-gray-800">Cap Rate</p>
-                <p id="capRate${index}" class="text-2xl font-bold text-blue-600"> - </p>
-                <p class="text-lg font-bold mt-4 text-gray-800">Cash-on-Cash</p>
-                <p id="cashOnCash${index}" class="text-2xl font-bold text-purple-600"> - </p>
-                <p id="recommendation${index}" class="text-base text-gray-700 mt-4 italic"></p>
-                <button class="expense-breakdown-btn bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-full mt-4 hover:bg-gray-300 transition-colors" data-index="${index}">
-                    Expense Breakdown
-                </button>
+            return `
+                <div id="result${index}" class="bg-gray-50 border border-gray-200 rounded-xl p-6 transition-all duration-300 ease-in-out">
+                    <p class="text-xl font-bold mb-2 text-gray-800">Analysis ${index}</p>
+                    <div id="recommendation${index}" class="hidden text-center font-bold text-sm mb-4 p-2 rounded-lg text-white"></div>
+                    <p id="monthlyPayment${index}" class="text-gray-600">Mortgage: -</p>
+                    <p class="text-lg font-bold mt-4 text-gray-800">Monthly Cash Flow</p>
+                    <p id="cashFlow${index}" class="text-2xl font-bold text-gray-700"> - </p>
+                    <p class="text-lg font-bold mt-4 text-gray-800">Cap Rate</p>
+                    <p id="capRate${index}" class="text-2xl font-bold text-gray-700"> - </p>
+                    <p class="text-lg font-bold mt-4 text-gray-800">Cash-on-Cash</p>
+                    <p id="cashOnCash${index}" class="text-2xl font-bold text-gray-700"> - </p>
+                    <button class="expense-breakdown-btn bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-full mt-4 hover:bg-gray-300 transition-colors" data-index="${index}">
+                        Expense Breakdown
+                    </button>
+                </div>
             `;
-            return resultDiv;
         }
 
-        function calculateMortgage(principal, annualRate, loanTermYears) {
-            const monthlyRate = annualRate / 100 / 12;
-            const numberOfPayments = loanTermYears * 12;
-            if (monthlyRate === 0) {
-                return principal / numberOfPayments;
-            }
-            return principal * (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
-        }
-
-        function getRecommendation(cashFlow, capRate, cashOnCash) {
-            let recommendation = "";
-
-            if (cashFlow > 200 && capRate >= 7 && cashOnCash >= 8) {
-                recommendation = "Excellent Deal! Highly Recommended! 🚀";
-            } else if (cashFlow > 0 && capRate >= 5 && cashOnCash >= 5) {
-                recommendation = "Good Potential. Worth Considering. 👍";
-            } else if (cashFlow >= -50 && capRate >= 3) {
-                recommendation = "Marginal Deal. Proceed with caution. 🧐";
-            } else {
-                recommendation = "Poor Investment. Not Recommended. 👎";
-            }
-            return recommendation;
-        }
-
-
-        function calculateAndDisplayResults() {
-            calculatedResults.cashFlows = [];
-            calculatedResults.capRates = [];
-            calculatedResults.cashOnCash = [];
-            calculatedResults.labels = [];
-            calculatedResults.expenses = [];
-
-            let bestCashFlow = -Infinity;
-            let bestCapRate = -Infinity;
-            let bestCashOnCash = -Infinity;
-            let bestCashFlowIndex = -1;
-            let bestCapRateIndex = -1;
-            let bestCashOnCashIndex = -1;
-
-            for (let i = 1; i <= analysisCount; i++) {
-                const price = parseFloat(document.getElementById(`price${i}`).value);
-                const downPayment = parseFloat(document.getElementById(`downPayment${i}`).value);
-                const rate = parseFloat(document.getElementById(`rate${i}`).value);
-                const term = parseFloat(document.getElementById(`term${i}`).value);
-                const income = parseFloat(document.getElementById(`income${i}`).value);
-                const vacancy = parseFloat(document.getElementById(`vacancy${i}`).value);
-                const propertyManagement = parseFloat(document.getElementById(`propertyManagement${i}`).value);
-                const taxes = parseFloat(document.getElementById(`taxes${i}`).value);
-                const insurance = parseFloat(document.getElementById(`insurance${i}`).value);
-                const repairs = parseFloat(document.getElementById(`repairs${i}`).value);
-                const capex = parseFloat(document.getElementById(`capex${i}`).value);
-                const address = document.getElementById(`address${i}`).value;
-
-                // Validate inputs
-                if (isNaN(price) || isNaN(downPayment) || isNaN(rate) || isNaN(term) || isNaN(income) || isNaN(vacancy) || isNaN(propertyManagement) || isNaN(taxes) || isNaN(insurance) || isNaN(repairs) || isNaN(capex)) {
-                    document.getElementById(`monthlyPayment${i}`).textContent = `Mortgage: N/A`;
-                    document.getElementById(`cashFlow${i}`).textContent = `N/A`;
-                    document.getElementById(`capRate${i}`).textContent = `N/A`;
-                    document.getElementById(`cashOnCash${i}`).textContent = `N/A`;
-                    document.getElementById(`recommendation${i}`).textContent = `Invalid input.`;
-                    continue; // Skip calculation for this analysis
-                }
-
-                const loanAmount = price * (1 - downPayment / 100);
-                const monthlyMortgage = calculateMortgage(loanAmount, rate, term);
-                const annualTaxes = taxes;
-                const monthlyTaxes = annualTaxes / 12;
-
-                const actualRentalIncome = income * (1 - vacancy / 100);
-                const monthlyPropertyManagement = actualRentalIncome * (propertyManagement / 100);
-
-                const totalMonthlyExpenses = monthlyMortgage + monthlyTaxes + insurance + repairs + capex + monthlyPropertyManagement;
-                const monthlyCashFlow = actualRentalIncome - totalMonthlyExpenses;
-
-                const netOperatingIncomeAnnual = (actualRentalIncome - monthlyPropertyManagement - monthlyTaxes - insurance - repairs - capex) * 12;
-                const capRate = (netOperatingIncomeAnnual / price) * 100;
-
-                const initialInvestment = price * (downPayment / 100);
-                const cashOnCashReturn = (monthlyCashFlow * 12 / initialInvestment) * 100;
-
-                document.getElementById(`monthlyPayment${i}`).textContent = `Mortgage: $${monthlyMortgage.toFixed(2)}`;
-                document.getElementById(`cashFlow${i}`).textContent = `$${monthlyCashFlow.toFixed(2)}`;
-                document.getElementById(`capRate${i}`).textContent = `${capRate.toFixed(2)}%`;
-                document.getElementById(`cashOnCash${i}`).textContent = `${cashOnCashReturn.toFixed(2)}%`;
-                document.getElementById(`recommendation${i}`).textContent = getRecommendation(monthlyCashFlow, capRate, cashOnCashReturn);
-
-
-                // Update winner logic
-                if (monthlyCashFlow > bestCashFlow) {
-                    bestCashFlow = monthlyCashFlow;
-                    bestCashFlowIndex = i;
-                }
-                if (capRate > bestCapRate) {
-                    bestCapRate = capRate;
-                    bestCapRateIndex = i;
-                }
-                if (cashOnCashReturn > bestCashOnCash) {
-                    bestCashOnCash = cashOnCashReturn;
-                    bestCashOnCashIndex = i;
-                }
-
-                calculatedResults.cashFlows.push(monthlyCashFlow);
-                calculatedResults.capRates.push(capRate);
-                calculatedResults.cashOnCash.push(cashOnCashReturn);
-                calculatedResults.labels.push(address || `Analysis ${i}`);
-                calculatedResults.expenses.push({
-                    mortgage: monthlyMortgage,
-                    taxes: monthlyTaxes,
-                    insurance: insurance,
-                    repairs: repairs,
-                    capex: capex,
-                    propertyManagement: monthlyPropertyManagement
-                });
-            }
-
-            displayWinner(bestCashFlowIndex, bestCapRateIndex, bestCashOnCashIndex);
-            updateChart();
-        }
-
-        function updateChart() {
-            if (myChart) {
-                myChart.destroy(); // Destroy existing chart before creating a new one
-            }
-
-            const ctx = document.getElementById('comparisonChart').getContext('2d');
-            const chartType = chartTypeSelector.value;
-            const chartMetric = chartMetricSelector.value;
-
-            let dataValues = [];
-            let chartLabel = '';
-
-            switch (chartMetric) {
-                case 'cashFlow':
-                    dataValues = calculatedResults.cashFlows;
-                    chartLabel = 'Monthly Cash Flow ($)';
-                    break;
-                case 'capRate':
-                    dataValues = calculatedResults.capRates;
-                    chartLabel = 'Cap Rate (%)';
-                    break;
-                case 'cashOnCash':
-                    dataValues = calculatedResults.cashOnCash;
-                    chartLabel = 'Cash-on-Cash Return (%)';
-                    break;
-            }
-
-            const backgroundColors = calculatedResults.labels.map((_, i) => analysisColors[i % analysisColors.length]);
-            const borderColors = calculatedResults.labels.map((_, i) => analysisColors[i % analysisColors.length]);
-
-            let chartConfig = {
-                type: chartType,
-                data: {
-                    labels: calculatedResults.labels,
-                    datasets: [{
-                        label: chartLabel,
-                        data: dataValues,
-                        backgroundColor: backgroundColors,
-                        borderColor: borderColors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            };
-
-            // Specific options for Pie/Doughnut Chart
-            if (chartType === 'pie' || chartType === 'doughnut') {
-                chartConfig.options.scales = {}; // No scales for pie/doughnut charts
-                chartConfig.options.plugins.tooltip.callbacks.label = function(context) {
-                    let label = context.label || '';
-                    if (label) {
-                        label += ': ';
-                    }
-                    if (context.parsed !== null) {
-                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
-                        if (context.chart.getDatasetMeta(0).total) {
-                            const percentage = (context.parsed / context.chart.getDatasetMeta(0).total * 100).toFixed(2);
-                            label += ` (${percentage}%)`;
-                        }
-                    }
-                    return label;
-                };
-            }
-
-            myChart = new Chart(ctx, chartConfig);
-        }
-
-        function displayWinner(cashFlowIndex, capRateIndex, cashOnCashIndex) {
-            const winnerEl = document.getElementById('winner');
-            let winnerText = "Best Deals: ";
-
-            const uniqueWinners = new Set();
-            if (cashFlowIndex !== -1) uniqueWinners.add(`Cash Flow (Analysis ${cashFlowIndex})`);
-            if (capRateIndex !== -1) uniqueWinners.add(`Cap Rate (Analysis ${capRateIndex})`);
-            if (cashOnCashIndex !== -1) uniqueWinners.add(`Cash-on-Cash (Analysis ${cashOnCashIndex})`);
-
-            if (uniqueWinners.size > 0) {
-                winnerText += Array.from(uniqueWinners).join(', ');
-                winnerEl.className = 'mt-8 text-center text-2xl font-bold text-indigo-700'; // Highlight the winner
-            } else {
-                winnerText = "No clear winner yet. Enter more data!";
-                winnerEl.className = 'mt-8 text-center text-2xl font-bold text-gray-700';
-            }
-            winnerEl.textContent = winnerText;
-        }
-
-        function addAnalysisSection() {
-            if (analysisCount >= 4) {
-                alert("You can add a maximum of 4 analyses for comparison.");
+        // Add a new analysis section
+        function addAnalysis() {
+            if (analysisCount >= analysisColors.length) {
+                showMessageBox("You can only add up to 4 analyses for comparison.");
                 return;
             }
             analysisCount++;
             const newAnalysisHtml = createAnalysisSection(analysisCount);
-            const newAnalysisElement = document.createElement('div');
-            newAnalysisElement.innerHTML = newAnalysisHtml; // Wrap in a div to properly append its content
-            analysisContainer.appendChild(newAnalysisElement.firstElementChild); // Append the direct child
-
-            const newResultDiv = createResultSection(analysisCount);
-            resultsGrid.appendChild(newResultDiv);
-
-            attachEventListeners(analysisCount); // Re-attach event listeners for new elements
-            calculateAndDisplayResults();
+            const newResultHtml = createResultSection(analysisCount);
+            analysisContainer.insertAdjacentHTML('beforeend', newAnalysisHtml);
+            resultsGrid.insertAdjacentHTML('beforeend', newResultHtml);
+            attachListeners();
+            calculateMetrics(analysisCount);
+            updateChart();
         }
 
-        function removeAnalysisSection(indexToRemove) {
-            if (analysisCount <= 1) {
-                alert("You must have at least one analysis section.");
-                return;
+        // Remove an analysis section
+        function removeAnalysis(index) {
+            const analysisToRemove = document.getElementById(`analysis${index}`);
+            const resultToRemove = document.getElementById(`result${index}`);
+            if (analysisToRemove) {
+                analysisToRemove.remove();
             }
-
-            const analysisToRemove = document.getElementById(`analysis${indexToRemove}`);
-            const resultToRemove = document.getElementById(`result${indexToRemove}`);
-
-            if (analysisToRemove) analysisToRemove.remove();
-            if (resultToRemove) resultToRemove.remove();
-
-            // Re-index remaining sections
-            for (let i = indexToRemove + 1; i <= analysisCount; i++) {
-                const currentAnalysis = document.getElementById(`analysis${i}`);
-                const currentResult = document.getElementById(`result${i}`);
-
-                if (currentAnalysis) {
-                    currentAnalysis.id = `analysis${i - 1}`;
-                    currentAnalysis.querySelector('h2').innerHTML = `Analysis ${i - 1} <button class="close-analysis-btn text-gray-400 hover:text-red-500 transition-colors" data-index="${i - 1}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>`;
-                    // Update all input IDs and for attributes
-                    currentAnalysis.querySelectorAll('.deal-input').forEach(input => {
-                        const oldId = input.id;
-                        const newId = oldId.replace(`${i}`, `${i - 1}`);
-                        input.id = newId;
-                        const label = currentAnalysis.querySelector(`label[for="${oldId}"]`);
-                        if (label) label.setAttribute('for', newId);
-                    });
-                    const mapBtn = currentAnalysis.querySelector(`#mapBtn${i}`);
-                    if (mapBtn) mapBtn.id = `mapBtn${i-1}`;
-                }
-                if (currentResult) {
-                    currentResult.id = `result${i - 1}`;
-                    currentResult.querySelector('p').textContent = `Analysis ${i - 1}`;
-                    currentResult.querySelector('.expense-breakdown-btn').dataset.index = `${i - 1}`;
-                    currentResult.querySelector(`#monthlyPayment${i}`).id = `monthlyPayment${i-1}`;
-                    currentResult.querySelector(`#cashFlow${i}`).id = `cashFlow${i-1}`;
-                    currentResult.querySelector(`#capRate${i}`).id = `capRate${i-1}`;
-                    currentResult.querySelector(`#cashOnCash${i}`).id = `cashOnCash${i-1}`;
-                    currentResult.querySelector(`#recommendation${i}`).id = `recommendation${i-1}`;
-                }
+            if (resultToRemove) {
+                resultToRemove.remove();
             }
-
-            analysisCount--;
-            calculateAndDisplayResults();
+            // Re-index remaining analyses
+            reIndexAnalyses();
+            updateChart();
         }
 
-        function attachEventListeners(index) {
-            // Event delegation for deal-input elements
-            document.querySelectorAll(`#analysis${index} .deal-input`).forEach(input => {
-                input.addEventListener('input', calculateAndDisplayResults);
-            });
+        // Re-index analyses after one is removed
+        function reIndexAnalyses() {
+            const analyses = analysisContainer.querySelectorAll('[id^="analysis"]');
+            const results = resultsGrid.querySelectorAll('[id^="result"]');
+            analysisCount = 0;
+            for (let i = 0; i < analyses.length; i++) {
+                analysisCount++;
+                const newIndex = i + 1;
+                const analysisEl = analyses[i];
+                const resultEl = results[i];
 
-            // Event listener for the new close button
-            const closeBtn = document.querySelector(`#analysis${index} .close-analysis-btn`);
-            if (closeBtn) {
-                closeBtn.addEventListener('click', (event) => {
-                    const indexToRemove = parseInt(event.currentTarget.dataset.index);
-                    removeAnalysisSection(indexToRemove);
+                analysisEl.id = `analysis${newIndex}`;
+                analysisEl.className = `${analysisBgColors[i]} ${analysisBorderColors[i]} rounded-xl p-6`;
+                analysisEl.querySelector('h3').innerHTML = `Analysis ${newIndex} <button class="close-analysis-btn text-gray-400 hover:text-red-500 transition-colors" data-index="${newIndex}"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>`;
+                analysisEl.querySelector('h3').className = `text-2xl font-bold ${analysisTextColors[i]} mb-4 flex justify-between items-center`;
+                const inputs = analysisEl.querySelectorAll('input');
+                inputs.forEach(input => {
+                    const oldId = input.id;
+                    const newId = oldId.replace(/\d+$/, newIndex);
+                    input.id = newId;
+                    input.placeholder = analysisPlaceholder[i];
+                    input.className = `deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[i]} ${analysisBorderColors[i]}`;
                 });
+                const labels = analysisEl.querySelectorAll('label');
+                labels.forEach(label => {
+                    const oldFor = label.htmlFor;
+                    const newFor = oldFor.replace(/\d+$/, newIndex);
+                    label.htmlFor = newFor;
+                });
+                const mapBtn = analysisEl.querySelector('[id^="mapBtn"]');
+                if (mapBtn) {
+                     mapBtn.id = `mapBtn${newIndex}`;
+                }
+                
+                resultEl.id = `result${newIndex}`;
+                resultEl.querySelector('p:first-child').textContent = `Analysis ${newIndex}`;
+                resultEl.querySelector('.expense-breakdown-btn').dataset.index = newIndex;
+            }
+            attachListeners(); // Re-attach all listeners
+        }
+
+        // Function to get a recommendation based on investment metrics
+        function getRecommendation(monthlyCashFlow, capRate, cashOnCashReturn) {
+            let recommendation = { text: '', style: '' };
+
+            if (monthlyCashFlow > 200 && capRate > 0.07 && cashOnCashReturn > 0.12) {
+                recommendation.text = 'Excellent Deal! Highly Recommended! 🚀';
+                recommendation.style = 'bg-green-600';
+            } else if (monthlyCashFlow > 50 && capRate > 0.05 && cashOnCashReturn > 0.08) {
+                recommendation.text = 'Good Potential. Worth Considering. 👍';
+                recommendation.style = 'bg-yellow-600';
+            } else if (monthlyCashFlow >= -100 && capRate > 0.02) {
+                recommendation.text = 'Marginal Deal. Proceed with caution. 🧐';
+                recommendation.style = 'bg-orange-600';
+            } else {
+                recommendation.text = 'Poor Investment. Not Recommended! 👎';
+                recommendation.style = 'bg-red-600';
+            }
+            return recommendation;
+        }
+
+        // Calculate investment metrics
+        function calculateMetrics(index) {
+            const price = parseFloat(document.getElementById(`price${index}`).value) || 0;
+            const downPayment = parseFloat(document.getElementById(`downPayment${index}`).value) / 100 || 0;
+            const rate = parseFloat(document.getElementById(`rate${index}`).value) / 100 / 12 || 0;
+            const term = parseFloat(document.getElementById(`term${index}`).value) || 0;
+            const income = parseFloat(document.getElementById(`income${index}`).value) || 0;
+            const vacancy = parseFloat(document.getElementById(`vacancy${index}`).value) / 100 || 0;
+            const propertyManagement = parseFloat(document.getElementById(`propertyManagement${index}`).value) / 100 || 0;
+            const taxes = parseFloat(document.getElementById(`taxes${index}`).value) / 12 || 0;
+            const insurance = parseFloat(document.getElementById(`insurance${index}`).value) || 0;
+            const repairs = parseFloat(document.getElementById(`repairs${index}`).value) || 0;
+            const capex = parseFloat(document.getElementById(`capex${index}`).value) || 0;
+
+            if (price === 0) return;
+
+            // Mortgage calculation
+            const loanAmount = price * (1 - downPayment);
+            const numPayments = term * 12;
+            let monthlyPayment = 0;
+            if (rate > 0) {
+                monthlyPayment = loanAmount * (rate * Math.pow(1 + rate, numPayments)) / (Math.pow(1 + rate, numPayments) - 1);
+            } else {
+                monthlyPayment = loanAmount / numPayments;
             }
 
-            // Event listener for map button (if implementing map functionality)
-            const mapBtn = document.getElementById(`mapBtn${index}`);
-            if (mapBtn) {
-                mapBtn.addEventListener('click', () => {
-                    const address = document.getElementById(`address${index}`).value;
-                    if (address) {
-                        // Open Google Maps in a new tab
-                        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank');
-                    } else {
-                        alert('Please enter a property address first.');
+            // Expenses and income
+            const grossOperatingIncome = income * (1 - vacancy);
+            const operatingExpenses = (grossOperatingIncome * propertyManagement) + taxes + insurance + repairs + capex;
+            const netOperatingIncome = grossOperatingIncome - operatingExpenses;
+
+            // Metrics
+            const cashFlow = netOperatingIncome - monthlyPayment;
+            const capRate = (netOperatingIncome * 12) / price;
+            const cashOnCash = cashFlow * 12 / (price * downPayment);
+            const recommendation = getRecommendation(cashFlow, capRate, cashOnCash);
+
+            const cashFlowEl = document.getElementById(`cashFlow${index}`);
+            const recommendationEl = document.getElementById(`recommendation${index}`);
+            
+            document.getElementById(`monthlyPayment${index}`).textContent = `Mortgage: $${monthlyPayment.toFixed(2)}`;
+            cashFlowEl.textContent = `$${cashFlow.toFixed(2)}`;
+            document.getElementById(`capRate${index}`).textContent = `${(capRate * 100).toFixed(2)}%`;
+            document.getElementById(`cashOnCash${index}`).textContent = `${(cashOnCash * 100).toFixed(2)}%`;
+
+            // Display and style the recommendation
+            if (recommendation.text) {
+                recommendationEl.textContent = recommendation.text;
+                recommendationEl.className = `${recommendation.style} text-white text-center font-bold text-sm mb-4 p-2 rounded-lg`;
+                recommendationEl.classList.remove('hidden');
+            } else {
+                recommendationEl.classList.add('hidden');
+            }
+
+            // Highlight cash flow based on value
+            if (cashFlow > 0) {
+                cashFlowEl.classList.remove('text-red-600');
+                cashFlowEl.classList.add('text-green-600');
+            } else {
+                cashFlowEl.classList.remove('text-green-600');
+                cashFlowEl.classList.add('text-red-600');
+            }
+
+            // Store results
+            calculatedResults.cashFlows[index - 1] = cashFlow;
+            calculatedResults.capRates[index - 1] = capRate * 100;
+            calculatedResults.cashOnCash[index - 1] = cashOnCash * 100;
+            calculatedResults.labels[index - 1] = `Analysis ${index}`;
+            calculatedResults.expenses[index - 1] = {
+                mortgage: monthlyPayment,
+                vacancy: income * vacancy,
+                propertyManagement: grossOperatingIncome * propertyManagement,
+                taxes: taxes,
+                insurance: insurance,
+                repairs: repairs,
+                capex: capex
+            };
+        }
+
+        // Update the chart with the latest data
+        function updateChart() {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            const chartType = chartTypeSelector.value;
+            const chartMetric = chartMetricSelector.value;
+            const labels = calculatedResults.labels.slice(0, analysisCount);
+            let data = [];
+            let winnerIndex = -1;
+            let winnerValue = -Infinity;
+            const winnerTextEl = document.getElementById('winner');
+
+            if (chartMetric === 'cashFlow') {
+                data = calculatedResults.cashFlows.slice(0, analysisCount);
+            } else if (chartMetric === 'capRate') {
+                data = calculatedResults.capRates.slice(0, analysisCount);
+            } else {
+                data = calculatedResults.cashOnCash.slice(0, analysisCount);
+            }
+
+            // Determine the winner
+            data.forEach((value, index) => {
+                if (value > winnerValue) {
+                    winnerValue = value;
+                    winnerIndex = index + 1;
+                }
+            });
+            winnerTextEl.textContent = winnerIndex > 0 ? `Winner: Analysis ${winnerIndex}` : '';
+
+            const datasets = [{
+                label: chartMetric === 'cashFlow' ? 'Monthly Cash Flow' :
+                       chartMetric === 'capRate' ? 'Cap Rate (%)' :
+                       'Cash-on-Cash Return (%)',
+                data: data,
+                backgroundColor: analysisColors.slice(0, analysisCount),
+                borderColor: analysisColors.slice(0, analysisCount),
+                borderWidth: 1,
+            }];
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            if (chartType === 'pie') {
+                myChart = new Chart(ctx, {
+                    type: chartType,
+                    data: {
+                        labels: labels,
+                        datasets: datasets,
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: {
+                                display: true,
+                                text: 'Investment Comparison'
+                            }
+                        }
                     }
                 });
-            }
-
-            // Event listener for help buttons (delegated)
-            document.querySelectorAll(`#analysis${index} .help-btn`).forEach(button => {
-                button.addEventListener('click', showHelpModal);
-            });
-
-            // Event listener for expense breakdown buttons (delegated)
-            document.querySelectorAll(`#result${index} .expense-breakdown-btn`).forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const idx = parseInt(event.currentTarget.dataset.index) - 1; // 0-indexed for array
-                    showExpenseBreakdownModal(idx);
+            } else {
+                myChart = new Chart(ctx, {
+                    type: chartType,
+                    data: {
+                        labels: labels,
+                        datasets: datasets,
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            },
+                        },
+                    },
                 });
+            }
+        }
+
+        // Attach event listeners to all analysis sections and buttons
+        function attachListeners() {
+            const dealInputs = document.querySelectorAll('.deal-input');
+            dealInputs.forEach(input => {
+                input.removeEventListener('input', handleInput);
+                input.addEventListener('input', handleInput);
+            });
+            
+            const closeButtons = document.querySelectorAll('.close-analysis-btn');
+            closeButtons.forEach(btn => {
+                btn.removeEventListener('click', handleCloseButtonClick);
+                btn.addEventListener('click', handleCloseButtonClick);
+            });
+
+            const expenseButtons = document.querySelectorAll('.expense-breakdown-btn');
+            expenseButtons.forEach(btn => {
+                btn.removeEventListener('click', handleExpenseBreakdownClick);
+                btn.addEventListener('click', handleExpenseBreakdownClick);
+            });
+
+            const mapButtons = document.querySelectorAll('[id^="mapBtn"]');
+            mapButtons.forEach(btn => {
+                btn.removeEventListener('click', handleMapButtonClick);
+                btn.addEventListener('click', handleMapButtonClick);
+            });
+
+            const helpButtons = document.querySelectorAll('.help-btn');
+            helpButtons.forEach(btn => {
+                btn.removeEventListener('click', handleHelpButtonClick);
+                btn.addEventListener('click', handleHelpButtonClick);
             });
         }
 
-        function showHelpModal(event) {
-            const term = event.currentTarget.dataset.term;
-            helpModalTitle.textContent = term;
-            helpModalContent.textContent = helpTexts[term] || "No detailed help available for this term.";
-            helpModal.style.display = "flex"; // Use flex to center
+        function handleInput(event) {
+            const index = event.target.id.match(/\d+/)[0];
+            calculateMetrics(index);
+            updateChart();
         }
 
-        helpModalCloseBtn.onclick = function() {
-            helpModal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == helpModal) {
-                helpModal.style.display = "none";
-            }
-            if (event.target == expenseBreakdownModal) {
-                expenseBreakdownModal.style.display = "none";
-            }
-            if (event.target == printScreenModal) {
-                printScreenModal.style.display = "none";
+        function handleCloseButtonClick(event) {
+            const index = event.currentTarget.dataset.index;
+            if (analysisCount > 1) {
+                removeAnalysis(index);
+            } else {
+                showMessageBox("You must have at least one analysis.");
             }
         }
 
-        function showExpenseBreakdownModal(analysisIdx) {
+        function handleMapButtonClick(event) {
+            const index = event.target.id.match(/\d+/)[0];
+            const address = document.getElementById(`address${index}`).value;
+            if (address) {
+                window.open(`https://www.google.com/maps/place/${encodeURIComponent(address)}`, '_blank');
+            } else {
+                showMessageBox("Please enter a property address first.");
+            }
+        }
+
+        function handleExpenseBreakdownClick(event) {
+            const index = parseInt(event.currentTarget.dataset.index);
+            const expenses = calculatedResults.expenses[index - 1];
+            if (expenses) {
+                showExpenseBreakdown(expenses, index);
+            } else {
+                showMessageBox("Please calculate the metrics for this analysis first.");
+            }
+        }
+
+        function handleHelpButtonClick(event) {
+            const term = event.target.dataset.term;
+            const content = helpTexts[term] || "No description available.";
+            showHelpModal(term, content);
+        }
+
+        // Show a message box
+        function showMessageBox(message) {
+            const existingModal = document.getElementById('messageBoxModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            const modalHtml = `
+                <div id="messageBoxModal" class="modal" style="display: flex;">
+                    <div class="modal-content text-center">
+                        <span class="modal-close" onclick="document.getElementById('messageBoxModal').remove()">&times;</span>
+                        <p class="text-xl font-semibold text-gray-800">${message}</p>
+                        <button class="mt-4 bg-indigo-600 text-white font-bold py-2 px-6 rounded-full hover:bg-indigo-700 transition-colors" onclick="document.getElementById('messageBoxModal').remove()">OK</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        // Display the expense breakdown modal
+        function showExpenseBreakdown(expenses, index) {
+            const expenseLabels = ['Mortgage', 'Vacancy', 'Property Management', 'Taxes', 'Insurance', 'Repairs', 'Capex'];
+            const expenseValues = [
+                expenses.mortgage,
+                expenses.vacancy,
+                expenses.propertyManagement,
+                expenses.taxes,
+                expenses.insurance,
+                expenses.repairs,
+                expenses.capex
+            ].map(value => parseFloat(value).toFixed(2));
+            
+            const expenseBreakdownModal = document.getElementById('expenseBreakdownModal');
+            const expenseChartCtx = document.getElementById('expenseChart').getContext('2d');
+            const modalTitle = expenseBreakdownModal.querySelector('h3');
+            modalTitle.textContent = `Monthly Expense Breakdown for Analysis ${index}`;
+
             if (expenseChartInstance) {
                 expenseChartInstance.destroy();
             }
 
-            const expensesData = calculatedResults.expenses[analysisIdx];
-            if (!expensesData) {
-                alert("No expense data available for this analysis.");
-                return;
-            }
-
-            const labels = ['Mortgage', 'Taxes', 'Insurance', 'Repairs & Maint.', 'CapEx', 'Prop. Management'];
-            const data = [
-                expensesData.mortgage,
-                expensesData.taxes,
-                expensesData.insurance,
-                expensesData.repairs,
-                expensesData.capex,
-                expensesData.propertyManagement
-            ];
-
             expenseChartInstance = new Chart(expenseChartCtx, {
                 type: 'pie',
                 data: {
-                    labels: labels,
+                    labels: expenseLabels,
                     datasets: [{
-                        data: data,
+                        data: expenseValues,
                         backgroundColor: [
-                            '#3b82f6', // Blue
-                            '#22c55e', // Green
-                            '#a855f7', // Purple
-                            '#ef4444', // Red
-                            '#f97316', // Orange
-                            '#6b7280'  // Gray
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)',
+                            'rgba(25, 25, 112, 0.8)'
                         ],
                         hoverOffset: 4
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
-                                        if (context.chart.getDatasetMeta(0).total) {
-                                            const percentage = (context.parsed / context.chart.getDatasetMeta(0).total * 100).toFixed(2);
-                                            label += ` (${percentage}%)`;
-                                        }
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
+                        legend: { position: 'top' },
+                        title: { display: true, text: `Analysis ${index} Monthly Expenses` }
                     }
                 }
             });
-            expenseBreakdownModal.style.display = "flex";
+            expenseBreakdownModal.style.display = 'flex';
         }
 
-        expenseModalCloseBtn.onclick = function() {
-            expenseBreakdownModal.style.display = "none";
+        // Display the help modal
+        function showHelpModal(title, content) {
+            helpModalTitle.textContent = title;
+            helpModalContent.textContent = content;
+            helpModal.style.display = 'flex';
         }
 
-        // Share Link Functionality
-        shareBtn.addEventListener('click', () => {
-            const analysesData = [];
-            for (let i = 1; i <= analysisCount; i++) {
-                const data = {
-                    address: document.getElementById(`address${i}`).value,
-                    price: parseFloat(document.getElementById(`price${i}`).value),
-                    downPayment: parseFloat(document.getElementById(`downPayment${i}`).value),
-                    rate: parseFloat(document.getElementById(`rate${i}`).value),
-                    term: parseFloat(document.getElementById(`term${i}`).value),
-                    income: parseFloat(document.getElementById(`income${i}`).value),
-                    vacancy: parseFloat(document.getElementById(`vacancy${i}`).value),
-                    propertyManagement: parseFloat(document.getElementById(`propertyManagement${i}`).value),
-                    taxes: parseFloat(document.getElementById(`taxes${i}`).value),
-                    insurance: parseFloat(document.getElementById(`insurance${i}`).value),
-                    repairs: parseFloat(document.getElementById(`repairs${i}`).value),
-                    capex: parseFloat(document.getElementById(`capex${i}`).value),
-                };
-                analysesData.push(data);
-            }
-            const encodedData = btoa(JSON.stringify(analysesData)); // Base64 encode the JSON string
-            const shareUrl = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
+        // Event listener for the "Add Analysis" button
+        addAnalysisBtn.addEventListener('click', addAnalysis);
 
-            navigator.clipboard.writeText(shareUrl)
-                .then(() => {
-                    copyMessageEl.textContent = "Link copied to clipboard!";
-                    copyMessageEl.classList.remove('hidden');
-                    setTimeout(() => copyMessageEl.classList.add('hidden'), 3000);
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                    copyMessageEl.textContent = "Failed to copy link.";
-                    copyMessageEl.classList.remove('hidden');
-                    setTimeout(() => copyMessageEl.classList.add('hidden'), 3000);
-                });
-        });
-
-        // Load Analyses Functionality from URL
-        function loadAnalysesFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const encodedData = urlParams.get('data');
-            if (encodedData) {
-                try {
-                    const decodedData = JSON.parse(atob(encodedData)); // Decode from Base64
-                    // Clear existing analyses
-                    while (analysisCount > 1) {
-                        removeAnalysisSection(analysisCount);
-                    }
-                    // Reset first analysis to default before loading new data if it's not present in decodedData
-                    if (decodedData.length === 0) {
-                         // Reset the first analysis inputs to default if no data is loaded
-                        const firstDefaults = { price: 300000, downPayment: 20, rate: 6.5, term: 30, income: 2500, vacancy: 5, propertyManagement: 8, taxes: 3600, insurance: 150, repairs: 100, capex: 100, address: '' };
-                        document.getElementById('address1').value = firstDefaults.address;
-                        document.getElementById('price1').value = firstDefaults.price;
-                        document.getElementById('downPayment1').value = firstDefaults.downPayment;
-                        document.getElementById('rate1').value = firstDefaults.rate;
-                        document.getElementById('term1').value = firstDefaults.term;
-                        document.getElementById('income1').value = firstDefaults.income;
-                        document.getElementById('vacancy1').value = firstDefaults.vacancy;
-                        document.getElementById('propertyManagement1').value = firstDefaults.propertyManagement;
-                        document.getElementById('taxes1').value = firstDefaults.taxes;
-                        document.getElementById('insurance1').value = firstDefaults.insurance;
-                        document.getElementById('repairs1').value = firstDefaults.repairs;
-                        document.getElementById('capex1').value = firstDefaults.capex;
-                        calculateAndDisplayResults();
-                        return;
-                    }
-
-
-                    // Populate first analysis and add new ones
-                    if (decodedData.length > 0) {
-                        const firstAnalysisData = decodedData[0];
-                        document.getElementById('address1').value = firstAnalysisData.address || '';
-                        document.getElementById('price1').value = firstAnalysisData.price;
-                        document.getElementById('downPayment1').value = firstAnalysisData.downPayment;
-                        document.getElementById('rate1').value = firstAnalysisData.rate;
-                        document.getElementById('term1').value = firstAnalysisData.term;
-                        document.getElementById('income1').value = firstAnalysisData.income;
-                        document.getElementById('vacancy1').value = firstAnalysisData.vacancy;
-                        document.getElementById('propertyManagement1').value = firstAnalysisData.propertyManagement;
-                        document.getElementById('taxes1').value = firstAnalysisData.taxes;
-                        document.getElementById('insurance1').value = firstAnalysisData.insurance;
-                        document.getElementById('repairs1').value = firstAnalysisData.repairs;
-                        document.getElementById('capex1').value = firstAnalysisData.capex;
-
-                        for (let i = 1; i < decodedData.length; i++) {
-                            addAnalysisSection(); // This increments analysisCount
-                            const currentAnalysisData = decodedData[i];
-                            document.getElementById(`address${analysisCount}`).value = currentAnalysisData.address || '';
-                            document.getElementById(`price${analysisCount}`).value = currentAnalysisData.price;
-                            document.getElementById(`downPayment${analysisCount}`).value = currentAnalysisData.downPayment;
-                            document.getElementById(`rate${analysisCount}`).value = currentAnalysisData.rate;
-                            document.getElementById(`term${analysisCount}`).value = currentAnalysisData.term;
-                            document.getElementById(`income${analysisCount}`).value = currentAnalysisData.income;
-                            document.getElementById(`vacancy${analysisCount}`).value = currentAnalysisData.vacancy;
-                            document.getElementById(`propertyManagement${analysisCount}`).value = currentAnalysisData.propertyManagement;
-                            document.getElementById(`taxes${analysisCount}`).value = currentAnalysisData.taxes;
-                            document.getElementById(`insurance${analysisCount}`).value = currentAnalysisData.insurance;
-                            document.getElementById(`repairs${analysisCount}`).value = currentAnalysisData.repairs;
-                            document.getElementById(`capex${analysisCount}`).value = currentAnalysisData.capex;
-                        }
-                        calculateAndDisplayResults();
-                    }
-                } catch (e) {
-                    console.error("Error decoding URL data:", e);
-                    alert("Invalid share link data.");
-                }
-            }
-        }
-
-        // Save Analyses to Local Storage
-        saveAnalysesBtn.addEventListener('click', () => {
-            const analysesData = [];
-            for (let i = 1; i <= analysisCount; i++) {
-                const data = {
-                    address: document.getElementById(`address${i}`).value,
-                    price: parseFloat(document.getElementById(`price${i}`).value),
-                    downPayment: parseFloat(document.getElementById(`downPayment${i}`).value),
-                    rate: parseFloat(document.getElementById(`rate${i}`).value),
-                    term: parseFloat(document.getElementById(`term${i}`).value),
-                    income: parseFloat(document.getElementById(`income${i}`).value),
-                    vacancy: parseFloat(document.getElementById(`vacancy${i}`).value),
-                    propertyManagement: parseFloat(document.getElementById(`propertyManagement${i}`).value),
-                    taxes: parseFloat(document.getElementById(`taxes${i}`).value),
-                    insurance: parseFloat(document.getElementById(`insurance${i}`).value),
-                    repairs: parseFloat(document.getElementById(`repairs${i}`).value),
-                    capex: parseFloat(document.getElementById(`capex${i}`).value),
-                };
-                analysesData.push(data);
-            }
-            try {
-                localStorage.setItem('savedAnalyses', JSON.stringify(analysesData));
-                saveMessageEl.textContent = "Analyses saved successfully!";
-                saveMessageEl.classList.remove('hidden');
-                saveMessageEl.classList.add('text-green-600');
-                setTimeout(() => {
-                    saveMessageEl.classList.add('hidden');
-                    saveMessageEl.classList.remove('text-green-600');
-                }, 3000);
-            } catch (e) {
-                console.error("Failed to save analyses to local storage:", e);
-                saveMessageEl.textContent = "Failed to save analyses. Storage limit might be reached.";
-                saveMessageEl.classList.remove('hidden');
-                saveMessageEl.classList.add('text-red-600');
-                setTimeout(() => {
-                    saveMessageEl.classList.add('hidden');
-                    saveMessageEl.classList.remove('text-red-600');
-                }, 3000);
-            }
-        });
-
-        // Load Analyses from Local Storage
-        loadAnalysesBtn.addEventListener('click', () => {
-            try {
-                const savedData = localStorage.getItem('savedAnalyses');
-                if (savedData) {
-                    const loadedAnalyses = JSON.parse(savedData);
-                    // Clear existing analyses
-                    while (analysisCount > 1) {
-                        removeAnalysisSection(analysisCount);
-                    }
-                    // Populate first analysis and add new ones
-                    if (loadedAnalyses.length > 0) {
-                        const firstAnalysisData = loadedAnalyses[0];
-                        document.getElementById('address1').value = firstAnalysisData.address || '';
-                        document.getElementById('price1').value = firstAnalysisData.price;
-                        document.getElementById('downPayment1').value = firstAnalysisData.downPayment;
-                        document.getElementById('rate1').value = firstAnalysisData.rate;
-                        document.getElementById('term1').value = firstAnalysisData.term;
-                        document.getElementById('income1').value = firstAnalysisData.income;
-                        document.getElementById('vacancy1').value = firstAnalysisData.vacancy;
-                        document.getElementById('propertyManagement1').value = firstAnalysisData.propertyManagement;
-                        document.getElementById('taxes1').value = firstAnalysisData.taxes;
-                        document.getElementById('insurance1').value = firstAnalysisData.insurance;
-                        document.getElementById('repairs1').value = firstAnalysisData.repairs;
-                        document.getElementById('capex1').value = firstAnalysisData.capex;
-
-                        for (let i = 1; i < loadedAnalyses.length; i++) {
-                            addAnalysisSection(); // This increments analysisCount
-                            const currentAnalysisData = loadedAnalyses[i];
-                            document.getElementById(`address${analysisCount}`).value = currentAnalysisData.address || '';
-                            document.getElementById(`price${analysisCount}`).value = currentAnalysisData.price;
-                            document.getElementById(`downPayment${analysisCount}`).value = currentAnalysisData.downPayment;
-                            document.getElementById(`rate${analysisCount}`).value = currentAnalysisData.rate;
-                            document.getElementById(`term${analysisCount}`).value = currentAnalysisData.term;
-                            document.getElementById(`income${analysisCount}`).value = currentAnalysisData.income;
-                            document.getElementById(`vacancy${analysisCount}`).value = currentAnalysisData.vacancy;
-                            document.getElementById(`propertyManagement${analysisCount}`).value = currentAnalysisData.propertyManagement;
-                            document.getElementById(`taxes${analysisCount}`).value = currentAnalysisData.taxes;
-                            document.getElementById(`insurance${analysisCount}`).value = currentAnalysisData.insurance;
-                            document.getElementById(`repairs${analysisCount}`).value = currentAnalysisData.repairs;
-                            document.getElementById(`capex${analysisCount}`).value = currentAnalysisData.capex;
-                        }
-                        saveMessageEl.textContent = "Analyses loaded successfully!";
-                        saveMessageEl.classList.remove('hidden');
-                        saveMessageEl.classList.add('text-green-600');
-                        setTimeout(() => {
-                            saveMessageEl.classList.add('hidden');
-                            saveMessageEl.classList.remove('text-green-600');
-                        }, 3000);
-                        calculateAndDisplayResults();
-                    } else {
-                        saveMessageEl.textContent = "No saved analyses found.";
-                        saveMessageEl.classList.remove('hidden');
-                        saveMessageEl.classList.add('text-yellow-600');
-                        setTimeout(() => {
-                            saveMessageEl.classList.add('hidden');
-                            saveMessageEl.classList.remove('text-yellow-600');
-                        }, 3000);
-                    }
-                } else {
-                    saveMessageEl.textContent = "No saved analyses found.";
-                    saveMessageEl.classList.remove('hidden');
-                    saveMessageEl.classList.add('text-yellow-600');
-                    setTimeout(() => {
-                        saveMessageEl.classList.add('hidden');
-                        saveMessageEl.classList.remove('text-yellow-600');
-                    }, 3000);
-                }
-            } catch (e) {
-                console.error("Failed to load analyses from local storage:", e);
-                saveMessageEl.textContent = "Failed to load analyses. Data might be corrupted.";
-                saveMessageEl.classList.remove('hidden');
-                saveMessageEl.classList.add('text-red-600');
-                setTimeout(() => {
-                    saveMessageEl.classList.add('hidden');
-                    saveMessageEl.classList.remove('text-red-600');
-                }, 3000);
-            }
-        });
-
-
-        // Print Screen Functionality
-        printScreenBtn.addEventListener('click', async () => {
-            loadingOverlay.style.display = 'flex'; // Show loading overlay
-            try {
-                // Temporarily hide buttons and modals to capture a clean screenshot
-                const buttonsToHide = document.querySelectorAll('#addAnalysisBtn, #saveAnalysesBtn, #loadAnalysesBtn, #printScreenBtn, #shareBtn, .close-analysis-btn, .expense-breakdown-btn, .help-btn, .modal');
-                buttonsToHide.forEach(btn => btn.style.visibility = 'hidden');
-
-                // Ensure the chart renders correctly before capture
-                if (myChart) myChart.resize();
-                if (expenseChartInstance) expenseChartInstance.resize();
-
-                const canvas = await html2canvas(document.body, {
-                    scale: 2, // Increase scale for better quality
-                    useCORS: true, // If you have external images/fonts
-                    logging: false, // Disable logging for cleaner console
-                    scrollX: 0,
-                    scrollY: -window.scrollY // Capture from top of the page, even if scrolled
-                });
-                printScreenImage.src = canvas.toDataURL('image/png');
-                printScreenModal.style.display = 'flex';
-                downloadBtn.href = canvas.toDataURL('image/png');
-                downloadBtn.download = 'real_estate_analysis.png';
-            } catch (error) {
-                console.error("Error capturing screen:", error);
-                alert("Failed to capture screen. Please try again.");
-            } finally {
-                // Restore visibility of hidden elements
-                const buttonsToHide = document.querySelectorAll('#addAnalysisBtn, #saveAnalysesBtn, #loadAnalysesBtn, #printScreenBtn, #shareBtn, .close-analysis-btn, .expense-breakdown-btn, .help-btn, .modal');
-                buttonsToHide.forEach(btn => btn.style.visibility = 'visible';);
-                printScreenModal.style.display = 'flex'; // Ensure modal is visible if it was intended to be
-                loadingOverlay.style.display = 'none'; // Hide loading overlay
-            }
-        });
-
-
-        modalCloseBtn.onclick = function() {
-            printScreenModal.style.display = "none";
-        }
-
-
-        // Initial setup
-        addAnalysisBtn.addEventListener('click', addAnalysisSection);
+        // Event listeners for chart controls
         chartMetricSelector.addEventListener('change', updateChart);
         chartTypeSelector.addEventListener('change', updateChart);
+        
+        // Event listener for the print screen button
+        printScreenBtn.addEventListener('click', () => {
+            loadingOverlay.style.display = 'flex';
+            const container = document.querySelector('.container');
+            html2canvas(container).then(canvas => {
+                const imageDataUrl = canvas.toDataURL('image/png');
+                printScreenImage.src = imageDataUrl;
+                printScreenModal.style.display = 'flex';
+                loadingOverlay.style.display = 'none';
+            });
+        });
 
-        // Attach event listeners to the initial analysis section
-        attachEventListeners(1);
-        calculateAndDisplayResults(); // Initial calculation on load
+        // Event listener for the download button inside the print screen modal
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'real_estate_analysis.png';
+            link.href = printScreenImage.src;
+            link.click();
+        });
 
-        // Load analyses from URL on page load
-        window.addEventListener('load', loadAnalysesFromUrl);
+        // Event listeners for closing modals
+        modalCloseBtn.addEventListener('click', () => {
+            printScreenModal.style.display = 'none';
+        });
+        expenseModalCloseBtn.addEventListener('click', () => {
+            expenseBreakdownModal.style.display = 'none';
+        });
+        helpModalCloseBtn.addEventListener('click', () => {
+            helpModal.style.display = 'none';
+        });
+        window.addEventListener('click', (event) => {
+            if (event.target == printScreenModal) {
+                printScreenModal.style.display = 'none';
+            }
+            if (event.target == expenseBreakdownModal) {
+                expenseBreakdownModal.style.display = 'none';
+            }
+            if (event.target == helpModal) {
+                helpModal.style.display = 'none';
+            }
+        });
+
+        // Event listener for the "Share" button
+        shareBtn.addEventListener('click', () => {
+            const data = [];
+            for (let i = 1; i <= analysisCount; i++) {
+                data.push({
+                    address: document.getElementById(`address${i}`).value,
+                    price: parseFloat(document.getElementById(`price${i}`).value) || 0,
+                    downPayment: parseFloat(document.getElementById(`downPayment${i}`).value) || 0,
+                    rate: parseFloat(document.getElementById(`rate${i}`).value) || 0,
+                    term: parseFloat(document.getElementById(`term${i}`).value) || 0,
+                    income: parseFloat(document.getElementById(`income${i}`).value) || 0,
+                    vacancy: parseFloat(document.getElementById(`vacancy${i}`).value) || 0,
+                    propertyManagement: parseFloat(document.getElementById(`propertyManagement${i}`).value) || 0,
+                    taxes: parseFloat(document.getElementById(`taxes${i}`).value) || 0,
+                    insurance: parseFloat(document.getElementById(`insurance${i}`).value) || 0,
+                    repairs: parseFloat(document.getElementById(`repairs${i}`).value) || 0,
+                    capex: parseFloat(document.getElementById(`capex${i}`).value) || 0,
+                });
+            }
+            const encodedData = btoa(JSON.stringify(data));
+            const shareUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?data=${encodedData}`;
+            
+            // Use a custom function to copy to clipboard due to iframe constraints
+            function copyToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    copyMessageEl.textContent = 'Link copied to clipboard!';
+                    copyMessageEl.classList.remove('hidden');
+                    setTimeout(() => copyMessageEl.classList.add('hidden'), 3000);
+                } catch (err) {
+                    copyMessageEl.textContent = 'Failed to copy link. Please copy it manually: ' + text;
+                    copyMessageEl.classList.remove('hidden');
+                }
+                document.body.removeChild(textarea);
+            }
+            copyToClipboard(shareUrl);
+        });
+
+        // Event listener for the "Save" button
+        saveAnalysesBtn.addEventListener('click', () => {
+            const data = [];
+            for (let i = 1; i <= analysisCount; i++) {
+                data.push({
+                    address: document.getElementById(`address${i}`).value,
+                    price: parseFloat(document.getElementById(`price${i}`).value) || 0,
+                    downPayment: parseFloat(document.getElementById(`downPayment${i}`).value) || 0,
+                    rate: parseFloat(document.getElementById(`rate${i}`).value) || 0,
+                    term: parseFloat(document.getElementById(`term${i}`).value) || 0,
+                    income: parseFloat(document.getElementById(`income${i}`).value) || 0,
+                    vacancy: parseFloat(document.getElementById(`vacancy${i}`).value) || 0,
+                    propertyManagement: parseFloat(document.getElementById(`propertyManagement${i}`).value) || 0,
+                    taxes: parseFloat(document.getElementById(`taxes${i}`).value) || 0,
+                    insurance: parseFloat(document.getElementById(`insurance${i}`).value) || 0,
+                    repairs: parseFloat(document.getElementById(`repairs${i}`).value) || 0,
+                    capex: parseFloat(document.getElementById(`capex${i}`).value) || 0,
+                });
+            }
+            localStorage.setItem('realEstateAnalyses', JSON.stringify(data));
+            saveMessageEl.textContent = 'Analyses saved to local storage!';
+            saveMessageEl.classList.remove('hidden');
+            setTimeout(() => saveMessageEl.classList.add('hidden'), 3000);
+        });
+
+        // Event listener for the "Load" button
+        loadAnalysesBtn.addEventListener('click', () => {
+            const savedData = localStorage.getItem('realEstateAnalyses');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                // Clear existing analyses
+                while (analysisContainer.firstChild) {
+                    analysisContainer.removeChild(analysisContainer.firstChild);
+                }
+                while (resultsGrid.firstChild) {
+                    resultsGrid.removeChild(resultsGrid.firstChild);
+                }
+                analysisCount = 0;
+                
+                // Load saved data
+                data.forEach(item => {
+                    analysisCount++;
+                    analysisContainer.insertAdjacentHTML('beforeend', createAnalysisSection(analysisCount, item));
+                    resultsGrid.insertAdjacentHTML('beforeend', createResultSection(analysisCount));
+                    calculateMetrics(analysisCount);
+                });
+                attachListeners();
+                updateChart();
+                saveMessageEl.textContent = 'Analyses loaded from local storage!';
+                saveMessageEl.classList.remove('hidden');
+                setTimeout(() => saveMessageEl.classList.add('hidden'), 3000);
+            } else {
+                saveMessageEl.textContent = 'No saved analyses found!';
+                saveMessageEl.classList.remove('hidden');
+                setTimeout(() => saveMessageEl.classList.add('hidden'), 3000);
+            }
+        });
+        
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for shared data in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedData = urlParams.get('data');
+            if (sharedData) {
+                try {
+                    const data = JSON.parse(atob(sharedData));
+                    // Clear initial analysis
+                    document.getElementById('analysis1').remove();
+                    document.getElementById('result1').remove();
+                    analysisCount = 0;
+                    // Load shared data
+                    data.forEach(item => {
+                        analysisCount++;
+                        analysisContainer.insertAdjacentHTML('beforeend', createAnalysisSection(analysisCount, item));
+                        resultsGrid.insertAdjacentHTML('beforeend', createResultSection(analysisCount));
+                        calculateMetrics(analysisCount);
+                    });
+                } catch (e) {
+                    console.error("Failed to parse shared data:", e);
+                }
+            } else {
+                // If no shared data, calculate for the default first analysis
+                calculateMetrics(1);
+            }
+            attachListeners();
+            updateChart();
+        });
 
     </script>
 </body>
