@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Estate Investment Calculator</title>
-    <!-- Use a simple font and load Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Library to capture the screen and create an image -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         body {
@@ -87,7 +85,6 @@
         <h1 class="text-4xl lg:text-5xl font-bold text-center mb-10 text-gray-800">Real Estate Investment Calculator</h1>
 
         <div id="analysis-container" class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            <!-- Initial Analysis 1 Section -->
             <div id="analysis1" class="bg-blue-50 border border-blue-200 rounded-xl p-6">
                 <h2 class="text-3xl font-semibold text-blue-800 mb-6 text-center flex justify-between items-center">
                     Analysis 1
@@ -186,7 +183,6 @@
             </div>
         </div>
 
-        <!-- Add Button & Share Link -->
         <div class="flex flex-col lg:flex-row items-center justify-center mt-10 space-y-4 lg:space-y-0 lg:space-x-4">
             <button id="addAnalysisBtn" class="bg-indigo-600 text-white font-bold py-4 px-10 rounded-full shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 Add Another Analysis
@@ -208,11 +204,9 @@
         <div id="save-message" class="mt-4 text-center text-sm text-gray-500 hidden"></div>
 
 
-        <!-- Results Section -->
         <div id="results" class="mt-12 space-y-6">
             <h3 class="text-3xl font-semibold text-center text-gray-800">Comparison Results</h3>
             <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                <!-- Initial Result 1 Section -->
                 <div id="result1" class="bg-gray-50 border border-gray-200 rounded-xl p-6">
                     <p class="text-xl font-bold mb-2">Analysis 1</p>
                     <p id="monthlyPayment1" class="text-gray-600">Mortgage: -</p>
@@ -222,6 +216,7 @@
                     <p id="capRate1" class="text-2xl font-bold text-blue-600"> - </p>
                     <p class="text-lg font-bold mt-4 text-gray-800">Cash-on-Cash</p>
                     <p id="cashOnCash1" class="text-2xl font-bold text-purple-600"> - </p>
+                    <p id="recommendation1" class="text-base text-gray-700 mt-4 italic"></p>
                     <button class="expense-breakdown-btn bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-full mt-4 hover:bg-gray-300 transition-colors" data-index="1">
                         Expense Breakdown
                     </button>
@@ -229,7 +224,6 @@
             </div>
             <div id="winner" class="mt-8 text-center text-2xl font-bold"></div>
 
-            <!-- Graph section for comparison -->
             <div class="mt-12">
                 <div class="flex items-center justify-center space-x-4 mb-4">
                     <h4 class="text-2xl font-semibold text-gray-700">Comparison Chart</h4>
@@ -251,41 +245,37 @@
         </div>
     </div>
 
-    <!-- Modal for the print screen image -->
     <div id="printScreenModal" class="modal">
         <div class="modal-content">
-            <span class="modal-close">&times;</span>
+            <span class="modal-close">×</span>
             <h3 class="text-2xl font-bold mb-4 text-center">Snapshot</h3>
             <img id="printScreenImage" class="w-full h-auto rounded-lg shadow-lg">
             <div class="text-center mt-6">
-                 <button id="downloadBtn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <button id="downloadBtn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     Download Image
                 </button>
             </div>
         </div>
     </div>
     
-    <!-- Modal for Expense Breakdown -->
     <div id="expenseBreakdownModal" class="modal">
         <div class="modal-content">
-            <span class="modal-close-expense-breakdown">&times;</span>
+            <span class="modal-close-expense-breakdown">×</span>
             <h3 class="text-2xl font-bold mb-4 text-center">Monthly Expense Breakdown</h3>
             <div class="bg-gray-50 p-6 rounded-xl shadow-inner">
-                 <canvas id="expenseChart"></canvas>
+                <canvas id="expenseChart"></canvas>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Help/Tooltips -->
     <div id="helpModal" class="modal">
         <div class="modal-content">
-            <span class="modal-close-help">&times;</span>
+            <span class="modal-close-help">×</span>
             <h3 id="helpModalTitle" class="text-2xl font-bold mb-4 text-center">Help</h3>
             <p id="helpModalContent" class="text-gray-700"></p>
         </div>
     </div>
 
-    <!-- Loading overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <p>Generating snapshot...</p>
     </div>
@@ -366,7 +356,7 @@
                 { price: 350000, downPayment: 20, rate: 6.8, term: 30, income: 2800, vacancy: 5, propertyManagement: 8, taxes: 4200, insurance: 175, repairs: 100, capex: 100, address: '' },
                 { price: 250000, downPayment: 25, rate: 6.2, term: 30, income: 2100, vacancy: 5, propertyManagement: 8, taxes: 3000, insurance: 120, repairs: 100, capex: 100, address: '' }
             ];
-            const d = data.price ? data : defaults[index - 1];
+            const d = data.price ? data : defaults[index - 1] || defaults[0]; // Fallback to first default if index out of bounds
 
             return `
                 <div id="analysis${index}" class="${analysisBgColors[index-1]} ${analysisBorderColors[index-1]} rounded-xl p-6">
@@ -382,7 +372,7 @@
                         <div class="flex flex-col">
                             <label for="address${index}" class="text-sm font-medium text-gray-700 mb-1">Property Address</label>
                             <div class="flex items-center space-x-2">
-                                <input type="text" id="address${index}" placeholder="${analysisPlaceholder[index-1]}" value="${d.address}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]} flex-grow">
+                                <input type="text" id="address${index}" placeholder="${analysisPlaceholder[index-1] || analysisPlaceholder[0]}" value="${d.address}" class="deal-input p-3 border border-gray-300 rounded-lg ${analysisRingColors[index-1]} ${analysisBorderColors[index-1]} flex-grow">
                                 <button id="mapBtn${index}" class="${analysisMapBtnBg[index-1]} text-white p-3 rounded-lg ${analysisMapBtnHoverBg[index-1]} transition-colors">Map</button>
                             </div>
                         </div>
@@ -468,552 +458,440 @@
             `;
         }
 
-        // Helper function to create a results section HTML string
+        // Helper function to create a result section HTML string
         function createResultSection(index) {
-            return `
-                <div id="result${index}" class="bg-gray-50 border border-gray-200 rounded-xl p-6">
-                    <p class="text-xl font-bold mb-2">Analysis ${index}</p>
-                    <p id="monthlyPayment${index}" class="text-gray-600">Mortgage: -</p>
-                    <p class="text-lg font-bold mt-4 text-gray-800">Monthly Cash Flow</p>
-                    <p id="cashFlow${index}" class="text-2xl font-bold text-green-600"> - </p>
-                    <p class="text-lg font-bold mt-4 text-gray-800">Cap Rate</p>
-                    <p id="capRate${index}" class="text-2xl font-bold text-blue-600"> - </p>
-                    <p class="text-lg font-bold mt-4 text-gray-800">Cash-on-Cash</p>
-                    <p id="cashOnCash${index}" class="text-2xl font-bold text-purple-600"> - </p>
-                    <button class="expense-breakdown-btn bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-full mt-4 hover:bg-gray-300 transition-colors" data-index="${index}">
-                        Expense Breakdown
-                    </button>
-                </div>
+            const resultDiv = document.createElement('div');
+            resultDiv.id = `result${index}`;
+            resultDiv.classList.add('bg-gray-50', 'border', 'border-gray-200', 'rounded-xl', 'p-6');
+            resultDiv.innerHTML = `
+                <p class="text-xl font-bold mb-2">Analysis ${index}</p>
+                <p id="monthlyPayment${index}" class="text-gray-600">Mortgage: -</p>
+                <p class="text-lg font-bold mt-4 text-gray-800">Monthly Cash Flow</p>
+                <p id="cashFlow${index}" class="text-2xl font-bold text-green-600"> - </p>
+                <p class="text-lg font-bold mt-4 text-gray-800">Cap Rate</p>
+                <p id="capRate${index}" class="text-2xl font-bold text-blue-600"> - </p>
+                <p class="text-lg font-bold mt-4 text-gray-800">Cash-on-Cash</p>
+                <p id="cashOnCash${index}" class="text-2xl font-bold text-purple-600"> - </p>
+                <p id="recommendation${index}" class="text-base text-gray-700 mt-4 italic"></p>
+                <button class="expense-breakdown-btn bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-full mt-4 hover:bg-gray-300 transition-colors" data-index="${index}">
+                    Expense Breakdown
+                </button>
             `;
+            return resultDiv;
         }
 
-        // Main calculation function
-        function calculateAll() {
-            // Function to get a numeric value from an input field
-            const getVal = (id) => parseFloat(document.getElementById(id).value) || 0;
+        function calculateMortgage(principal, annualRate, loanTermYears) {
+            const monthlyRate = annualRate / 100 / 12;
+            const numberOfPayments = loanTermYears * 12;
+            if (monthlyRate === 0) {
+                return principal / numberOfPayments;
+            }
+            return principal * (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+        }
 
+        function getRecommendation(cashFlow, capRate, cashOnCash) {
+            let recommendation = "";
+
+            if (cashFlow > 200 && capRate >= 7 && cashOnCash >= 8) {
+                recommendation = "Excellent Deal! Highly Recommended! 🚀";
+            } else if (cashFlow > 0 && capRate >= 5 && cashOnCash >= 5) {
+                recommendation = "Good Potential. Worth Considering. 👍";
+            } else if (cashFlow >= -50 && capRate >= 3) {
+                recommendation = "Marginal Deal. Proceed with caution. 🧐";
+            } else {
+                recommendation = "Poor Investment. Not Recommended. 👎";
+            }
+            return recommendation;
+        }
+
+
+        function calculateAndDisplayResults() {
             calculatedResults.cashFlows = [];
             calculatedResults.capRates = [];
             calculatedResults.cashOnCash = [];
             calculatedResults.labels = [];
             calculatedResults.expenses = [];
 
-            const analysisDivs = analysisContainer.querySelectorAll('[id^="analysis"]');
+            let bestCashFlow = -Infinity;
+            let bestCapRate = -Infinity;
+            let bestCashOnCash = -Infinity;
+            let bestCashFlowIndex = -1;
+            let bestCapRateIndex = -1;
+            let bestCashOnCashIndex = -1;
 
-            analysisDivs.forEach((div, i) => {
-                const index = i + 1;
-                // Get values for each analysis
-                const price = getVal(`price${index}`);
-                const downPayment = getVal(`downPayment${index}`) / 100;
-                const rate = getVal(`rate${index}`) / 100 / 12;
-                const term = getVal(`term${index}`) * 12;
-                const income = getVal(`income${index}`);
-                const vacancy = getVal(`vacancy${index}`) / 100;
-                const propertyManagement = getVal(`propertyManagement${index}`) / 100;
-                const annualTaxes = getVal(`taxes${index}`);
-                const insurance = getVal(`insurance${index}`);
-                const repairs = getVal(`repairs${index}`);
-                const capex = getVal(`capex${index}`);
+            for (let i = 1; i <= analysisCount; i++) {
+                const price = parseFloat(document.getElementById(`price${i}`).value);
+                const downPayment = parseFloat(document.getElementById(`downPayment${i}`).value);
+                const rate = parseFloat(document.getElementById(`rate${i}`).value);
+                const term = parseFloat(document.getElementById(`term${i}`).value);
+                const income = parseFloat(document.getElementById(`income${i}`).value);
+                const vacancy = parseFloat(document.getElementById(`vacancy${i}`).value);
+                const propertyManagement = parseFloat(document.getElementById(`propertyManagement${i}`).value);
+                const taxes = parseFloat(document.getElementById(`taxes${i}`).value);
+                const insurance = parseFloat(document.getElementById(`insurance${i}`).value);
+                const repairs = parseFloat(document.getElementById(`repairs${i}`).value);
+                const capex = parseFloat(document.getElementById(`capex${i}`).value);
+                const address = document.getElementById(`address${i}`).value;
 
-                // Calculate mortgage payment
-                const loanAmount = price * (1 - downPayment);
-                let mortgage;
-                if (rate === 0) {
-                    mortgage = loanAmount / term;
-                } else {
-                    mortgage = loanAmount * (rate * Math.pow(1 + rate, term)) / (Math.pow(1 + rate, term) - 1);
+                // Validate inputs
+                if (isNaN(price) || isNaN(downPayment) || isNaN(rate) || isNaN(term) || isNaN(income) || isNaN(vacancy) || isNaN(propertyManagement) || isNaN(taxes) || isNaN(insurance) || isNaN(repairs) || isNaN(capex)) {
+                    document.getElementById(`monthlyPayment${i}`).textContent = `Mortgage: N/A`;
+                    document.getElementById(`cashFlow${i}`).textContent = `N/A`;
+                    document.getElementById(`capRate${i}`).textContent = `N/A`;
+                    document.getElementById(`cashOnCash${i}`).textContent = `N/A`;
+                    document.getElementById(`recommendation${i}`).textContent = `Invalid input.`;
+                    continue; // Skip calculation for this analysis
                 }
-                mortgage = isNaN(mortgage) || mortgage === Infinity ? 0 : mortgage;
 
-                // Calculate total monthly expenses and cash flow
-                const vacancyExpense = income * vacancy;
-                const propertyManagementExpense = income * propertyManagement;
-                const taxesExpense = annualTaxes / 12;
-                
-                const totalExpenses = mortgage + taxesExpense + insurance + vacancyExpense + propertyManagementExpense + repairs + capex;
-                const cashFlow = income - totalExpenses;
-                
-                // Calculate Cap Rate and Cash-on-Cash Return
-                const annualGrossIncome = income * 12;
-                const annualOperatingExpenses = (taxesExpense * 12) + (insurance * 12) + (vacancyExpense * 12) + (propertyManagementExpense * 12) + (repairs * 12) + (capex * 12);
-                const noi = annualGrossIncome - annualOperatingExpenses;
-                const capRate = (noi / price) * 100;
-                const annualCashFlow = cashFlow * 12;
-                const totalCashInvested = price * downPayment;
-                const cashOnCash = (annualCashFlow / totalCashInvested) * 100;
+                const loanAmount = price * (1 - downPayment / 100);
+                const monthlyMortgage = calculateMortgage(loanAmount, rate, term);
+                const annualTaxes = taxes;
+                const monthlyTaxes = annualTaxes / 12;
 
-                // Store results for chart
-                calculatedResults.cashFlows.push(cashFlow);
+                const actualRentalIncome = income * (1 - vacancy / 100);
+                const monthlyPropertyManagement = actualRentalIncome * (propertyManagement / 100);
+
+                const totalMonthlyExpenses = monthlyMortgage + monthlyTaxes + insurance + repairs + capex + monthlyPropertyManagement;
+                const monthlyCashFlow = actualRentalIncome - totalMonthlyExpenses;
+
+                const netOperatingIncomeAnnual = (actualRentalIncome - monthlyPropertyManagement - monthlyTaxes - insurance - repairs - capex) * 12;
+                const capRate = (netOperatingIncomeAnnual / price) * 100;
+
+                const initialInvestment = price * (downPayment / 100);
+                const cashOnCashReturn = (monthlyCashFlow * 12 / initialInvestment) * 100;
+
+                document.getElementById(`monthlyPayment${i}`).textContent = `Mortgage: $${monthlyMortgage.toFixed(2)}`;
+                document.getElementById(`cashFlow${i}`).textContent = `$${monthlyCashFlow.toFixed(2)}`;
+                document.getElementById(`capRate${i}`).textContent = `${capRate.toFixed(2)}%`;
+                document.getElementById(`cashOnCash${i}`).textContent = `${cashOnCashReturn.toFixed(2)}%`;
+                document.getElementById(`recommendation${i}`).textContent = getRecommendation(monthlyCashFlow, capRate, cashOnCashReturn);
+
+
+                // Update winner logic
+                if (monthlyCashFlow > bestCashFlow) {
+                    bestCashFlow = monthlyCashFlow;
+                    bestCashFlowIndex = i;
+                }
+                if (capRate > bestCapRate) {
+                    bestCapRate = capRate;
+                    bestCapRateIndex = i;
+                }
+                if (cashOnCashReturn > bestCashOnCash) {
+                    bestCashOnCash = cashOnCashReturn;
+                    bestCashOnCashIndex = i;
+                }
+
+                calculatedResults.cashFlows.push(monthlyCashFlow);
                 calculatedResults.capRates.push(capRate);
-                calculatedResults.cashOnCash.push(cashOnCash);
-                calculatedResults.labels.push(`Analysis ${index}`);
+                calculatedResults.cashOnCash.push(cashOnCashReturn);
+                calculatedResults.labels.push(address || `Analysis ${i}`);
                 calculatedResults.expenses.push({
-                    mortgage: mortgage,
-                    taxes: taxesExpense,
+                    mortgage: monthlyMortgage,
+                    taxes: monthlyTaxes,
                     insurance: insurance,
-                    vacancy: vacancyExpense,
-                    propertyManagement: propertyManagementExpense,
                     repairs: repairs,
                     capex: capex,
-                    other: totalExpenses - (mortgage + taxesExpense + insurance + vacancyExpense + propertyManagementExpense + repairs + capex)
+                    propertyManagement: monthlyPropertyManagement
                 });
-
-
-                // Display results
-                document.getElementById(`monthlyPayment${index}`).textContent = `Mortgage: $${mortgage.toFixed(2)}`;
-                document.getElementById(`cashFlow${index}`).textContent = `$${cashFlow.toFixed(2)}`;
-                document.getElementById(`capRate${index}`).textContent = `${capRate.toFixed(2)}%`;
-                document.getElementById(`cashOnCash${index}`).textContent = `${cashOnCash.toFixed(2)}%`;
-            });
-
-            // Highlight the winner based on cash flow
-            const winnerValue = Math.max(...calculatedResults.cashFlows);
-            const winnerIndex = calculatedResults.cashFlows.indexOf(winnerValue);
-
-            const resultDivs = resultsGrid.querySelectorAll('[id^="result"]');
-
-            resultDivs.forEach((div, i) => {
-                div.className = 'bg-gray-50 border border-gray-200 rounded-xl p-6';
-                if (i === winnerIndex && winnerValue > 0) {
-                    div.classList.add(`ring-4`, `ring-${analysisColors[i].slice(1)}-500`);
-                }
-            });
-
-            const winnerText = document.getElementById('winner');
-            if (winnerIndex !== -1 && winnerValue > 0) {
-                winnerText.textContent = `Analysis ${winnerIndex + 1} is the better option based on monthly cash flow!`;
-                winnerText.className = `mt-8 text-center text-2xl font-bold text-${analysisColors[winnerIndex].slice(1)}-600`;
-            } else {
-                winnerText.textContent = 'Please enter values to compare.';
-                winnerText.className = 'mt-8 text-center text-2xl font-bold text-gray-600';
             }
 
-            // Draw the comparison chart based on the selected metric and chart type
-            drawChart(chartMetricSelector.value, chartTypeSelector.value);
+            displayWinner(bestCashFlowIndex, bestCapRateIndex, bestCashOnCashIndex);
+            updateChart();
         }
 
-        // Event delegation for input fields to trigger real-time updates
-        analysisContainer.addEventListener('input', (e) => {
-            if (e.target.classList.contains('deal-input')) {
-                calculateAll();
-            }
-        });
-
-        // Add listener for "Add Analysis" button
-        addAnalysisBtn.addEventListener('click', () => {
-            if (analysisCount < 4) {
-                analysisCount++;
-                analysisContainer.insertAdjacentHTML('beforeend', createAnalysisSection(analysisCount));
-                resultsGrid.insertAdjacentHTML('beforeend', createResultSection(analysisCount));
-                calculateAll(); // Recalculate with the new analysis
-            }
-            if (analysisCount === 4) {
-                addAnalysisBtn.disabled = true;
-                addAnalysisBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            }
-        });
-
-        // Event delegation for map and close buttons
-        analysisContainer.addEventListener('click', (e) => {
-            if (e.target.closest('.close-analysis-btn')) {
-                const button = e.target.closest('.close-analysis-btn');
-                const index = parseInt(button.dataset.index);
-                if (analysisCount > 1) {
-                    document.getElementById(`analysis${index}`).remove();
-                    document.getElementById(`result${index}`).remove();
-                    analysisCount--;
-                    addAnalysisBtn.disabled = false;
-                    addAnalysisBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-
-                    // Re-index remaining analyses
-                    const remainingAnalyses = analysisContainer.querySelectorAll('[id^="analysis"]');
-                    const remainingResults = resultsGrid.querySelectorAll('[id^="result"]');
-
-                    remainingAnalyses.forEach((el, newIndex) => {
-                        const oldIndex = el.id.replace('analysis', '');
-                        const newId = `analysis${newIndex + 1}`;
-                        el.id = newId;
-                        el.querySelector('h2').childNodes[0].nodeValue = `Analysis ${newIndex + 1}`;
-                        el.querySelector('button').dataset.index = newIndex + 1;
-
-                        const inputs = el.querySelectorAll('input');
-                        inputs.forEach(input => {
-                            const oldId = input.id;
-                            const newId = oldId.replace(`analysis${oldIndex}`, `analysis${newIndex+1}`);
-                            input.id = newId.replace(oldIndex, newIndex+1);
-                            input.setAttribute('id', newId.replace(oldId, newId));
-                        });
-                        const labels = el.querySelectorAll('label');
-                        labels.forEach(label => {
-                            const oldFor = label.htmlFor;
-                            const newFor = oldFor.replace(oldIndex, newIndex+1);
-                            label.htmlFor = newFor;
-                        });
-                        el.querySelector('[id^="mapBtn"]').id = `mapBtn${newIndex+1}`;
-                    });
-                     remainingResults.forEach((el, newIndex) => {
-                        const newId = `result${newIndex + 1}`;
-                        el.id = newId;
-                        el.querySelector('p').childNodes[0].nodeValue = `Analysis ${newIndex + 1}`;
-                        el.querySelector('p[id^="monthlyPayment"]').id = `monthlyPayment${newIndex+1}`;
-                        el.querySelector('p[id^="cashFlow"]').id = `cashFlow${newIndex+1}`;
-                        el.querySelector('p[id^="capRate"]').id = `capRate${newIndex+1}`;
-                        el.querySelector('p[id^="cashOnCash"]').id = `cashOnCash${newIndex+1}`;
-                        el.querySelector('.expense-breakdown-btn').dataset.index = newIndex+1;
-                    });
-                    calculateAll(); // Recalculate after removing an analysis
-                }
-            } else if (e.target.closest('#mapBtn')) {
-                const index = e.target.closest('#mapBtn').id.replace('mapBtn', '');
-                const address = document.getElementById(`address${index}`).value;
-                if (address) {
-                    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank');
-                }
-            } else if (e.target.closest('.help-btn')) {
-                const term = e.target.closest('.help-btn').dataset.term;
-                helpModalTitle.textContent = term;
-                helpModalContent.textContent = helpTexts[term] || "No help text available.";
-                helpModal.style.display = 'flex';
-            }
-        });
-
-        // Event delegation for map buttons
-        analysisContainer.addEventListener('click', (e) => {
-            if (e.target.id.startsWith('mapBtn')) {
-                const index = e.target.id.replace('mapBtn', '');
-                const address = document.getElementById(`address${index}`).value;
-                if (address) {
-                    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank');
-                }
-            }
-        });
-
-        resultsGrid.addEventListener('click', (e) => {
-            if (e.target.closest('.expense-breakdown-btn')) {
-                const index = parseInt(e.target.closest('.expense-breakdown-btn').dataset.index) - 1;
-                const expenses = calculatedResults.expenses[index];
-                if (expenses) {
-                    drawExpenseBreakdownChart(expenses, `Analysis ${index + 1}`);
-                    expenseBreakdownModal.style.display = 'flex';
-                }
-            }
-        });
-        
-        // Add listener for save analyses button
-        saveAnalysesBtn.addEventListener('click', () => {
-            const analyses = [];
-            const analysisDivs = analysisContainer.querySelectorAll('[id^="analysis"]');
-            analysisDivs.forEach((div, i) => {
-                const index = i + 1;
-                const analysisData = {
-                    address: document.getElementById(`address${index}`).value,
-                    price: parseFloat(document.getElementById(`price${index}`).value) || 0,
-                    downPayment: parseFloat(document.getElementById(`downPayment${index}`).value) || 0,
-                    rate: parseFloat(document.getElementById(`rate${index}`).value) || 0,
-                    term: parseFloat(document.getElementById(`term${index}`).value) || 0,
-                    income: parseFloat(document.getElementById(`income${index}`).value) || 0,
-                    vacancy: parseFloat(document.getElementById(`vacancy${index}`).value) || 0,
-                    propertyManagement: parseFloat(document.getElementById(`propertyManagement${index}`).value) || 0,
-                    taxes: parseFloat(document.getElementById(`taxes${index}`).value) || 0,
-                    insurance: parseFloat(document.getElementById(`insurance${index}`).value) || 0,
-                    repairs: parseFloat(document.getElementById(`repairs${index}`).value) || 0,
-                    capex: parseFloat(document.getElementById(`capex${index}`).value) || 0
-                };
-                analyses.push(analysisData);
-            });
-            localStorage.setItem('realEstateAnalyses', JSON.stringify(analyses));
-            saveMessageEl.textContent = 'Analyses saved successfully!';
-            saveMessageEl.classList.remove('hidden', 'text-red-500');
-            saveMessageEl.classList.add('text-green-500');
-            setTimeout(() => saveMessageEl.classList.add('hidden'), 3000);
-        });
-
-        // Add listener for load analyses button
-        loadAnalysesBtn.addEventListener('click', () => {
-            try {
-                const savedAnalyses = JSON.parse(localStorage.getItem('realEstateAnalyses'));
-                if (savedAnalyses && Array.isArray(savedAnalyses) && savedAnalyses.length > 0) {
-                    // Clear existing analyses
-                    while (analysisContainer.firstChild) {
-                        analysisContainer.removeChild(analysisContainer.firstChild);
-                    }
-                    while (resultsGrid.firstChild) {
-                        resultsGrid.removeChild(resultsGrid.firstChild);
-                    }
-                    analysisCount = 0;
-
-                    // Load saved analyses
-                    savedAnalyses.forEach(data => {
-                        analysisCount++;
-                        analysisContainer.insertAdjacentHTML('beforeend', createAnalysisSection(analysisCount, data));
-                        resultsGrid.insertAdjacentHTML('beforeend', createResultSection(analysisCount));
-                    });
-
-                    // Update button state
-                    addAnalysisBtn.disabled = analysisCount >= 4;
-                    if (analysisCount >= 4) {
-                        addAnalysisBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                    } else {
-                        addAnalysisBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    }
-
-                    // Recalculate with the loaded data
-                    calculateAll();
-                    saveMessageEl.textContent = 'Analyses loaded successfully!';
-                    saveMessageEl.classList.remove('hidden', 'text-red-500');
-                    saveMessageEl.classList.add('text-green-500');
-                    setTimeout(() => saveMessageEl.classList.add('hidden'), 3000);
-
-                } else {
-                    saveMessageEl.textContent = 'No saved analyses found!';
-                    saveMessageEl.classList.remove('hidden', 'text-green-500');
-                    saveMessageEl.classList.add('text-red-500');
-                    setTimeout(() => saveMessageEl.classList.add('hidden'), 3000);
-                }
-            } catch (e) {
-                console.error("Error loading analyses from local storage:", e);
-                saveMessageEl.textContent = 'Error loading analyses.';
-                saveMessageEl.classList.remove('hidden', 'text-green-500');
-                saveMessageEl.classList.add('text-red-500');
-                setTimeout(() => saveMessageEl.classList.add('hidden'), 3000);
-            }
-        });
-
-
-        // Event listener for the metric selector dropdown
-        chartMetricSelector.addEventListener('change', () => {
-            drawChart(chartMetricSelector.value, chartTypeSelector.value);
-        });
-        
-        // Event listener for the chart type selector dropdown
-        chartTypeSelector.addEventListener('change', () => {
-            drawChart(chartMetricSelector.value, chartTypeSelector.value);
-        });
-        
-        // Add listener for share button
-        shareBtn.addEventListener('click', () => {
-            const url = window.location.href;
-            
-            try {
-                // Create a temporary input element to copy the text
-                const tempInput = document.createElement('textarea');
-                tempInput.value = url;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-
-                copyMessageEl.textContent = 'Link copied to clipboard!';
-                copyMessageEl.classList.remove('hidden');
-                setTimeout(() => copyMessageEl.classList.add('hidden'), 3000);
-            } catch (err) {
-                copyMessageEl.textContent = 'Failed to copy link. Please copy manually.';
-                copyMessageEl.classList.remove('hidden');
-                setTimeout(() => copyMessageEl.classList.add('hidden'), 3000);
-            }
-        });
-
-        // Add listener for print screen button
-        printScreenBtn.addEventListener('click', () => {
-            loadingOverlay.style.display = 'flex';
-            
-            // html2canvas will capture the contents of the element
-            html2canvas(document.querySelector(".container")).then(canvas => {
-                const imageDataUrl = canvas.toDataURL('image/png');
-                printScreenImage.src = imageDataUrl;
-                
-                // Set the download button's link
-                downloadBtn.href = imageDataUrl;
-                downloadBtn.download = 'real_estate_analysis.png';
-                
-                loadingOverlay.style.display = 'none';
-                printScreenModal.style.display = 'flex';
-            }).catch(err => {
-                loadingOverlay.style.display = 'none';
-                console.error("Error generating image:", err);
-                printMessageEl.textContent = 'Failed to generate image.';
-                printMessageEl.classList.remove('hidden');
-                setTimeout(() => printMessageEl.classList.add('hidden'), 3000);
-            });
-        });
-
-        // Close modal when user clicks on close button (x)
-        modalCloseBtn.addEventListener('click', () => {
-            printScreenModal.style.display = 'none';
-        });
-
-        expenseModalCloseBtn.addEventListener('click', () => {
-            expenseBreakdownModal.style.display = 'none';
-        });
-
-        helpModalCloseBtn.addEventListener('click', () => {
-            helpModal.style.display = 'none';
-        });
-
-        // Close modal when user clicks outside the modal content
-        window.addEventListener('click', (event) => {
-            if (event.target === printScreenModal) {
-                printScreenModal.style.display = 'none';
-            }
-            if (event.target === expenseBreakdownModal) {
-                expenseBreakdownModal.style.display = 'none';
-            }
-            if (event.target === helpModal) {
-                helpModal.style.display = 'none';
-            }
-        });
-
-        // Function to draw the comparison chart using Chart.js
-        function drawChart(metric, chartType) {
-            const chartData = {
-                'cashFlow': {
-                    label: 'Monthly Cash Flow',
-                    data: calculatedResults.cashFlows,
-                    unit: '$',
-                    title: 'Monthly Cash Flow Comparison'
-                },
-                'capRate': {
-                    label: 'Cap Rate',
-                    data: calculatedResults.capRates,
-                    unit: '%',
-                    title: 'Capitalization Rate Comparison'
-                },
-                'cashOnCash': {
-                    label: 'Cash-on-Cash Return',
-                    data: calculatedResults.cashOnCash,
-                    unit: '%',
-                    title: 'Cash-on-Cash Return Comparison'
-                }
-            };
-            
-            const selectedMetric = chartData[metric];
-
+        function updateChart() {
             if (myChart) {
-                myChart.destroy();
+                myChart.destroy(); // Destroy existing chart before creating a new one
             }
 
             const ctx = document.getElementById('comparisonChart').getContext('2d');
-            
-            const datasets = [{
-                label: selectedMetric.label,
-                data: selectedMetric.data,
-                backgroundColor: analysisColors,
-                borderColor: analysisColors.map(color => color),
-                borderWidth: 1
-            }];
+            const chartType = chartTypeSelector.value;
+            const chartMetric = chartMetricSelector.value;
 
-            const options = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: chartType === 'pie' ? true : false,
-                        position: 'right'
-                    },
-                    title: {
-                        display: true,
-                        text: selectedMetric.title,
-                        font: {
-                            size: 20,
-                            weight: 'bold'
+            let dataValues = [];
+            let chartLabel = '';
+
+            switch (chartMetric) {
+                case 'cashFlow':
+                    dataValues = calculatedResults.cashFlows;
+                    chartLabel = 'Monthly Cash Flow ($)';
+                    break;
+                case 'capRate':
+                    dataValues = calculatedResults.capRates;
+                    chartLabel = 'Cap Rate (%)';
+                    break;
+                case 'cashOnCash':
+                    dataValues = calculatedResults.cashOnCash;
+                    chartLabel = 'Cash-on-Cash Return (%)';
+                    break;
+            }
+
+            const backgroundColors = calculatedResults.labels.map((_, i) => analysisColors[i % analysisColors.length]);
+            const borderColors = calculatedResults.labels.map((_, i) => analysisColors[i % analysisColors.length]);
+
+            let chartConfig = {
+                type: chartType,
+                data: {
+                    labels: calculatedResults.labels,
+                    datasets: [{
+                        label: chartLabel,
+                        data: dataValues,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
                         },
-                        padding: {
-                            top: 10,
-                            bottom: 30
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
                         }
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label && chartType !== 'pie') {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += selectedMetric.unit === '%' ? `${context.parsed.y.toFixed(2)}%` : `$${context.parsed.y.toFixed(2)}`;
-                                } else {
-                                    label += selectedMetric.unit === '%' ? `${context.raw.toFixed(2)}%` : `$${context.raw.toFixed(2)}`;
-                                }
-                                return label;
-                            }
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
                 }
             };
 
-            // Set scales for non-pie charts
-            if (chartType !== 'pie') {
-                options.scales = {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: selectedMetric.label,
-                            font: {
-                                size: 16
-                            }
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return selectedMetric.unit === '%' ? value + '%' : `$${value.toFixed(2)}`;
-                            }
+            // Specific options for Pie/Doughnut Chart
+            if (chartType === 'pie' || chartType === 'doughnut') {
+                chartConfig.options.scales = {}; // No scales for pie/doughnut charts
+                chartConfig.options.plugins.tooltip.callbacks.label = function(context) {
+                    let label = context.label || '';
+                    if (label) {
+                        label += ': ';
+                    }
+                    if (context.parsed !== null) {
+                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+                        if (context.chart.getDatasetMeta(0).total) {
+                            const percentage = (context.parsed / context.chart.getDatasetMeta(0).total * 100).toFixed(2);
+                            label += ` (${percentage}%)`;
                         }
                     }
+                    return label;
                 };
             }
 
-            myChart = new Chart(ctx, {
-                type: chartType,
-                data: {
-                    labels: calculatedResults.labels,
-                    datasets: datasets
-                },
-                options: options
+            myChart = new Chart(ctx, chartConfig);
+        }
+
+        function displayWinner(cashFlowIndex, capRateIndex, cashOnCashIndex) {
+            const winnerEl = document.getElementById('winner');
+            let winnerText = "Best Deals: ";
+
+            const uniqueWinners = new Set();
+            if (cashFlowIndex !== -1) uniqueWinners.add(`Cash Flow (Analysis ${cashFlowIndex})`);
+            if (capRateIndex !== -1) uniqueWinners.add(`Cap Rate (Analysis ${capRateIndex})`);
+            if (cashOnCashIndex !== -1) uniqueWinners.add(`Cash-on-Cash (Analysis ${cashOnCashIndex})`);
+
+            if (uniqueWinners.size > 0) {
+                winnerText += Array.from(uniqueWinners).join(', ');
+                winnerEl.className = 'mt-8 text-center text-2xl font-bold text-indigo-700'; // Highlight the winner
+            } else {
+                winnerText = "No clear winner yet. Enter more data!";
+                winnerEl.className = 'mt-8 text-center text-2xl font-bold text-gray-700';
+            }
+            winnerEl.textContent = winnerText;
+        }
+
+        function addAnalysisSection() {
+            if (analysisCount >= 4) {
+                alert("You can add a maximum of 4 analyses for comparison.");
+                return;
+            }
+            analysisCount++;
+            const newAnalysisHtml = createAnalysisSection(analysisCount);
+            const newAnalysisElement = document.createElement('div');
+            newAnalysisElement.innerHTML = newAnalysisHtml; // Wrap in a div to properly append its content
+            analysisContainer.appendChild(newAnalysisElement.firstElementChild); // Append the direct child
+
+            const newResultDiv = createResultSection(analysisCount);
+            resultsGrid.appendChild(newResultDiv);
+
+            attachEventListeners(analysisCount); // Re-attach event listeners for new elements
+            calculateAndDisplayResults();
+        }
+
+        function removeAnalysisSection(indexToRemove) {
+            if (analysisCount <= 1) {
+                alert("You must have at least one analysis section.");
+                return;
+            }
+
+            const analysisToRemove = document.getElementById(`analysis${indexToRemove}`);
+            const resultToRemove = document.getElementById(`result${indexToRemove}`);
+
+            if (analysisToRemove) analysisToRemove.remove();
+            if (resultToRemove) resultToRemove.remove();
+
+            // Re-index remaining sections
+            for (let i = indexToRemove + 1; i <= analysisCount; i++) {
+                const currentAnalysis = document.getElementById(`analysis${i}`);
+                const currentResult = document.getElementById(`result${i}`);
+
+                if (currentAnalysis) {
+                    currentAnalysis.id = `analysis${i - 1}`;
+                    currentAnalysis.querySelector('h2').innerHTML = `Analysis ${i - 1} <button class="close-analysis-btn text-gray-400 hover:text-red-500 transition-colors" data-index="${i - 1}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>`;
+                    // Update all input IDs and for attributes
+                    currentAnalysis.querySelectorAll('.deal-input').forEach(input => {
+                        const oldId = input.id;
+                        const newId = oldId.replace(`${i}`, `${i - 1}`);
+                        input.id = newId;
+                        const label = currentAnalysis.querySelector(`label[for="${oldId}"]`);
+                        if (label) label.setAttribute('for', newId);
+                    });
+                    const mapBtn = currentAnalysis.querySelector(`#mapBtn${i}`);
+                    if (mapBtn) mapBtn.id = `mapBtn${i-1}`;
+                }
+                if (currentResult) {
+                    currentResult.id = `result${i - 1}`;
+                    currentResult.querySelector('p').textContent = `Analysis ${i - 1}`;
+                    currentResult.querySelector('.expense-breakdown-btn').dataset.index = `${i - 1}`;
+                    currentResult.querySelector(`#monthlyPayment${i}`).id = `monthlyPayment${i-1}`;
+                    currentResult.querySelector(`#cashFlow${i}`).id = `cashFlow${i-1}`;
+                    currentResult.querySelector(`#capRate${i}`).id = `capRate${i-1}`;
+                    currentResult.querySelector(`#cashOnCash${i}`).id = `cashOnCash${i-1}`;
+                    currentResult.querySelector(`#recommendation${i}`).id = `recommendation${i-1}`;
+                }
+            }
+
+            analysisCount--;
+            calculateAndDisplayResults();
+        }
+
+        function attachEventListeners(index) {
+            // Event delegation for deal-input elements
+            document.querySelectorAll(`#analysis${index} .deal-input`).forEach(input => {
+                input.addEventListener('input', calculateAndDisplayResults);
+            });
+
+            // Event listener for the new close button
+            const closeBtn = document.querySelector(`#analysis${index} .close-analysis-btn`);
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (event) => {
+                    const indexToRemove = parseInt(event.currentTarget.dataset.index);
+                    removeAnalysisSection(indexToRemove);
+                });
+            }
+
+            // Event listener for map button (if implementing map functionality)
+            const mapBtn = document.getElementById(`mapBtn${index}`);
+            if (mapBtn) {
+                mapBtn.addEventListener('click', () => {
+                    const address = document.getElementById(`address${index}`).value;
+                    if (address) {
+                        // Open Google Maps in a new tab
+                        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, '_blank');
+                    } else {
+                        alert('Please enter a property address first.');
+                    }
+                });
+            }
+
+            // Event listener for help buttons (delegated)
+            document.querySelectorAll(`#analysis${index} .help-btn`).forEach(button => {
+                button.addEventListener('click', showHelpModal);
+            });
+
+            // Event listener for expense breakdown buttons (delegated)
+            document.querySelectorAll(`#result${index} .expense-breakdown-btn`).forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const idx = parseInt(event.currentTarget.dataset.index) - 1; // 0-indexed for array
+                    showExpenseBreakdownModal(idx);
+                });
             });
         }
 
-        // Function to draw a pie chart for expense breakdown
-        function drawExpenseBreakdownChart(expenses, title) {
-            const expenseLabels = ['Mortgage', 'Taxes', 'Insurance', 'Vacancy', 'Property Management', 'Repairs & Maintenance', 'Capital Expenditures'];
-            const expenseValues = [
-                expenses.mortgage,
-                expenses.taxes,
-                expenses.insurance,
-                expenses.vacancy,
-                expenses.propertyManagement,
-                expenses.repairs,
-                expenses.capex
-            ];
-            
+        function showHelpModal(event) {
+            const term = event.currentTarget.dataset.term;
+            helpModalTitle.textContent = term;
+            helpModalContent.textContent = helpTexts[term] || "No detailed help available for this term.";
+            helpModal.style.display = "flex"; // Use flex to center
+        }
+
+        helpModalCloseBtn.onclick = function() {
+            helpModal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == helpModal) {
+                helpModal.style.display = "none";
+            }
+            if (event.target == expenseBreakdownModal) {
+                expenseBreakdownModal.style.display = "none";
+            }
+            if (event.target == printScreenModal) {
+                printScreenModal.style.display = "none";
+            }
+        }
+
+        function showExpenseBreakdownModal(analysisIdx) {
             if (expenseChartInstance) {
                 expenseChartInstance.destroy();
             }
-            
+
+            const expensesData = calculatedResults.expenses[analysisIdx];
+            if (!expensesData) {
+                alert("No expense data available for this analysis.");
+                return;
+            }
+
+            const labels = ['Mortgage', 'Taxes', 'Insurance', 'Repairs & Maint.', 'CapEx', 'Prop. Management'];
+            const data = [
+                expensesData.mortgage,
+                expensesData.taxes,
+                expensesData.insurance,
+                expensesData.repairs,
+                expensesData.capex,
+                expensesData.propertyManagement
+            ];
+
             expenseChartInstance = new Chart(expenseChartCtx, {
                 type: 'pie',
                 data: {
-                    labels: expenseLabels,
+                    labels: labels,
                     datasets: [{
-                        label: 'Monthly Expenses',
-                        data: expenseValues,
+                        data: data,
                         backgroundColor: [
-                            '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#a855f7', '#6366f1', '#ec4899'
+                            '#3b82f6', // Blue
+                            '#22c55e', // Green
+                            '#a855f7', // Purple
+                            '#ef4444', // Red
+                            '#f97316', // Orange
+                            '#6b7280'  // Gray
                         ],
                         hoverOffset: 4
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
                             position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: `${title} - Monthly Expense Breakdown`,
-                            font: {
-                                size: 20
-                            }
                         },
                         tooltip: {
                             callbacks: {
@@ -1023,7 +901,11 @@
                                         label += ': ';
                                     }
                                     if (context.parsed !== null) {
-                                        label += `$${context.parsed.toFixed(2)}`;
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+                                        if (context.chart.getDatasetMeta(0).total) {
+                                            const percentage = (context.parsed / context.chart.getDatasetMeta(0).total * 100).toFixed(2);
+                                            label += ` (${percentage}%)`;
+                                        }
                                     }
                                     return label;
                                 }
@@ -1032,12 +914,298 @@
                     }
                 }
             });
+            expenseBreakdownModal.style.display = "flex";
         }
-        
-        // Initial calculation on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            calculateAll();
+
+        expenseModalCloseBtn.onclick = function() {
+            expenseBreakdownModal.style.display = "none";
+        }
+
+        // Share Link Functionality
+        shareBtn.addEventListener('click', () => {
+            const analysesData = [];
+            for (let i = 1; i <= analysisCount; i++) {
+                const data = {
+                    address: document.getElementById(`address${i}`).value,
+                    price: parseFloat(document.getElementById(`price${i}`).value),
+                    downPayment: parseFloat(document.getElementById(`downPayment${i}`).value),
+                    rate: parseFloat(document.getElementById(`rate${i}`).value),
+                    term: parseFloat(document.getElementById(`term${i}`).value),
+                    income: parseFloat(document.getElementById(`income${i}`).value),
+                    vacancy: parseFloat(document.getElementById(`vacancy${i}`).value),
+                    propertyManagement: parseFloat(document.getElementById(`propertyManagement${i}`).value),
+                    taxes: parseFloat(document.getElementById(`taxes${i}`).value),
+                    insurance: parseFloat(document.getElementById(`insurance${i}`).value),
+                    repairs: parseFloat(document.getElementById(`repairs${i}`).value),
+                    capex: parseFloat(document.getElementById(`capex${i}`).value),
+                };
+                analysesData.push(data);
+            }
+            const encodedData = btoa(JSON.stringify(analysesData)); // Base64 encode the JSON string
+            const shareUrl = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
+
+            navigator.clipboard.writeText(shareUrl)
+                .then(() => {
+                    copyMessageEl.textContent = "Link copied to clipboard!";
+                    copyMessageEl.classList.remove('hidden');
+                    setTimeout(() => copyMessageEl.classList.add('hidden'), 3000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    copyMessageEl.textContent = "Failed to copy link.";
+                    copyMessageEl.classList.remove('hidden');
+                    setTimeout(() => copyMessageEl.classList.add('hidden'), 3000);
+                });
         });
+
+        // Load Analyses Functionality from URL
+        function loadAnalysesFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedData = urlParams.get('data');
+            if (encodedData) {
+                try {
+                    const decodedData = JSON.parse(atob(encodedData)); // Decode from Base64
+                    // Clear existing analyses
+                    while (analysisCount > 1) {
+                        removeAnalysisSection(analysisCount);
+                    }
+                    // Reset first analysis to default before loading new data if it's not present in decodedData
+                    if (decodedData.length === 0) {
+                         // Reset the first analysis inputs to default if no data is loaded
+                        const firstDefaults = { price: 300000, downPayment: 20, rate: 6.5, term: 30, income: 2500, vacancy: 5, propertyManagement: 8, taxes: 3600, insurance: 150, repairs: 100, capex: 100, address: '' };
+                        document.getElementById('address1').value = firstDefaults.address;
+                        document.getElementById('price1').value = firstDefaults.price;
+                        document.getElementById('downPayment1').value = firstDefaults.downPayment;
+                        document.getElementById('rate1').value = firstDefaults.rate;
+                        document.getElementById('term1').value = firstDefaults.term;
+                        document.getElementById('income1').value = firstDefaults.income;
+                        document.getElementById('vacancy1').value = firstDefaults.vacancy;
+                        document.getElementById('propertyManagement1').value = firstDefaults.propertyManagement;
+                        document.getElementById('taxes1').value = firstDefaults.taxes;
+                        document.getElementById('insurance1').value = firstDefaults.insurance;
+                        document.getElementById('repairs1').value = firstDefaults.repairs;
+                        document.getElementById('capex1').value = firstDefaults.capex;
+                        calculateAndDisplayResults();
+                        return;
+                    }
+
+
+                    // Populate first analysis and add new ones
+                    if (decodedData.length > 0) {
+                        const firstAnalysisData = decodedData[0];
+                        document.getElementById('address1').value = firstAnalysisData.address || '';
+                        document.getElementById('price1').value = firstAnalysisData.price;
+                        document.getElementById('downPayment1').value = firstAnalysisData.downPayment;
+                        document.getElementById('rate1').value = firstAnalysisData.rate;
+                        document.getElementById('term1').value = firstAnalysisData.term;
+                        document.getElementById('income1').value = firstAnalysisData.income;
+                        document.getElementById('vacancy1').value = firstAnalysisData.vacancy;
+                        document.getElementById('propertyManagement1').value = firstAnalysisData.propertyManagement;
+                        document.getElementById('taxes1').value = firstAnalysisData.taxes;
+                        document.getElementById('insurance1').value = firstAnalysisData.insurance;
+                        document.getElementById('repairs1').value = firstAnalysisData.repairs;
+                        document.getElementById('capex1').value = firstAnalysisData.capex;
+
+                        for (let i = 1; i < decodedData.length; i++) {
+                            addAnalysisSection(); // This increments analysisCount
+                            const currentAnalysisData = decodedData[i];
+                            document.getElementById(`address${analysisCount}`).value = currentAnalysisData.address || '';
+                            document.getElementById(`price${analysisCount}`).value = currentAnalysisData.price;
+                            document.getElementById(`downPayment${analysisCount}`).value = currentAnalysisData.downPayment;
+                            document.getElementById(`rate${analysisCount}`).value = currentAnalysisData.rate;
+                            document.getElementById(`term${analysisCount}`).value = currentAnalysisData.term;
+                            document.getElementById(`income${analysisCount}`).value = currentAnalysisData.income;
+                            document.getElementById(`vacancy${analysisCount}`).value = currentAnalysisData.vacancy;
+                            document.getElementById(`propertyManagement${analysisCount}`).value = currentAnalysisData.propertyManagement;
+                            document.getElementById(`taxes${analysisCount}`).value = currentAnalysisData.taxes;
+                            document.getElementById(`insurance${analysisCount}`).value = currentAnalysisData.insurance;
+                            document.getElementById(`repairs${analysisCount}`).value = currentAnalysisData.repairs;
+                            document.getElementById(`capex${analysisCount}`).value = currentAnalysisData.capex;
+                        }
+                        calculateAndDisplayResults();
+                    }
+                } catch (e) {
+                    console.error("Error decoding URL data:", e);
+                    alert("Invalid share link data.");
+                }
+            }
+        }
+
+        // Save Analyses to Local Storage
+        saveAnalysesBtn.addEventListener('click', () => {
+            const analysesData = [];
+            for (let i = 1; i <= analysisCount; i++) {
+                const data = {
+                    address: document.getElementById(`address${i}`).value,
+                    price: parseFloat(document.getElementById(`price${i}`).value),
+                    downPayment: parseFloat(document.getElementById(`downPayment${i}`).value),
+                    rate: parseFloat(document.getElementById(`rate${i}`).value),
+                    term: parseFloat(document.getElementById(`term${i}`).value),
+                    income: parseFloat(document.getElementById(`income${i}`).value),
+                    vacancy: parseFloat(document.getElementById(`vacancy${i}`).value),
+                    propertyManagement: parseFloat(document.getElementById(`propertyManagement${i}`).value),
+                    taxes: parseFloat(document.getElementById(`taxes${i}`).value),
+                    insurance: parseFloat(document.getElementById(`insurance${i}`).value),
+                    repairs: parseFloat(document.getElementById(`repairs${i}`).value),
+                    capex: parseFloat(document.getElementById(`capex${i}`).value),
+                };
+                analysesData.push(data);
+            }
+            try {
+                localStorage.setItem('savedAnalyses', JSON.stringify(analysesData));
+                saveMessageEl.textContent = "Analyses saved successfully!";
+                saveMessageEl.classList.remove('hidden');
+                saveMessageEl.classList.add('text-green-600');
+                setTimeout(() => {
+                    saveMessageEl.classList.add('hidden');
+                    saveMessageEl.classList.remove('text-green-600');
+                }, 3000);
+            } catch (e) {
+                console.error("Failed to save analyses to local storage:", e);
+                saveMessageEl.textContent = "Failed to save analyses. Storage limit might be reached.";
+                saveMessageEl.classList.remove('hidden');
+                saveMessageEl.classList.add('text-red-600');
+                setTimeout(() => {
+                    saveMessageEl.classList.add('hidden');
+                    saveMessageEl.classList.remove('text-red-600');
+                }, 3000);
+            }
+        });
+
+        // Load Analyses from Local Storage
+        loadAnalysesBtn.addEventListener('click', () => {
+            try {
+                const savedData = localStorage.getItem('savedAnalyses');
+                if (savedData) {
+                    const loadedAnalyses = JSON.parse(savedData);
+                    // Clear existing analyses
+                    while (analysisCount > 1) {
+                        removeAnalysisSection(analysisCount);
+                    }
+                    // Populate first analysis and add new ones
+                    if (loadedAnalyses.length > 0) {
+                        const firstAnalysisData = loadedAnalyses[0];
+                        document.getElementById('address1').value = firstAnalysisData.address || '';
+                        document.getElementById('price1').value = firstAnalysisData.price;
+                        document.getElementById('downPayment1').value = firstAnalysisData.downPayment;
+                        document.getElementById('rate1').value = firstAnalysisData.rate;
+                        document.getElementById('term1').value = firstAnalysisData.term;
+                        document.getElementById('income1').value = firstAnalysisData.income;
+                        document.getElementById('vacancy1').value = firstAnalysisData.vacancy;
+                        document.getElementById('propertyManagement1').value = firstAnalysisData.propertyManagement;
+                        document.getElementById('taxes1').value = firstAnalysisData.taxes;
+                        document.getElementById('insurance1').value = firstAnalysisData.insurance;
+                        document.getElementById('repairs1').value = firstAnalysisData.repairs;
+                        document.getElementById('capex1').value = firstAnalysisData.capex;
+
+                        for (let i = 1; i < loadedAnalyses.length; i++) {
+                            addAnalysisSection(); // This increments analysisCount
+                            const currentAnalysisData = loadedAnalyses[i];
+                            document.getElementById(`address${analysisCount}`).value = currentAnalysisData.address || '';
+                            document.getElementById(`price${analysisCount}`).value = currentAnalysisData.price;
+                            document.getElementById(`downPayment${analysisCount}`).value = currentAnalysisData.downPayment;
+                            document.getElementById(`rate${analysisCount}`).value = currentAnalysisData.rate;
+                            document.getElementById(`term${analysisCount}`).value = currentAnalysisData.term;
+                            document.getElementById(`income${analysisCount}`).value = currentAnalysisData.income;
+                            document.getElementById(`vacancy${analysisCount}`).value = currentAnalysisData.vacancy;
+                            document.getElementById(`propertyManagement${analysisCount}`).value = currentAnalysisData.propertyManagement;
+                            document.getElementById(`taxes${analysisCount}`).value = currentAnalysisData.taxes;
+                            document.getElementById(`insurance${analysisCount}`).value = currentAnalysisData.insurance;
+                            document.getElementById(`repairs${analysisCount}`).value = currentAnalysisData.repairs;
+                            document.getElementById(`capex${analysisCount}`).value = currentAnalysisData.capex;
+                        }
+                        saveMessageEl.textContent = "Analyses loaded successfully!";
+                        saveMessageEl.classList.remove('hidden');
+                        saveMessageEl.classList.add('text-green-600');
+                        setTimeout(() => {
+                            saveMessageEl.classList.add('hidden');
+                            saveMessageEl.classList.remove('text-green-600');
+                        }, 3000);
+                        calculateAndDisplayResults();
+                    } else {
+                        saveMessageEl.textContent = "No saved analyses found.";
+                        saveMessageEl.classList.remove('hidden');
+                        saveMessageEl.classList.add('text-yellow-600');
+                        setTimeout(() => {
+                            saveMessageEl.classList.add('hidden');
+                            saveMessageEl.classList.remove('text-yellow-600');
+                        }, 3000);
+                    }
+                } else {
+                    saveMessageEl.textContent = "No saved analyses found.";
+                    saveMessageEl.classList.remove('hidden');
+                    saveMessageEl.classList.add('text-yellow-600');
+                    setTimeout(() => {
+                        saveMessageEl.classList.add('hidden');
+                        saveMessageEl.classList.remove('text-yellow-600');
+                    }, 3000);
+                }
+            } catch (e) {
+                console.error("Failed to load analyses from local storage:", e);
+                saveMessageEl.textContent = "Failed to load analyses. Data might be corrupted.";
+                saveMessageEl.classList.remove('hidden');
+                saveMessageEl.classList.add('text-red-600');
+                setTimeout(() => {
+                    saveMessageEl.classList.add('hidden');
+                    saveMessageEl.classList.remove('text-red-600');
+                }, 3000);
+            }
+        });
+
+
+        // Print Screen Functionality
+        printScreenBtn.addEventListener('click', async () => {
+            loadingOverlay.style.display = 'flex'; // Show loading overlay
+            try {
+                // Temporarily hide buttons and modals to capture a clean screenshot
+                const buttonsToHide = document.querySelectorAll('#addAnalysisBtn, #saveAnalysesBtn, #loadAnalysesBtn, #printScreenBtn, #shareBtn, .close-analysis-btn, .expense-breakdown-btn, .help-btn, .modal');
+                buttonsToHide.forEach(btn => btn.style.visibility = 'hidden');
+
+                // Ensure the chart renders correctly before capture
+                if (myChart) myChart.resize();
+                if (expenseChartInstance) expenseChartInstance.resize();
+
+                const canvas = await html2canvas(document.body, {
+                    scale: 2, // Increase scale for better quality
+                    useCORS: true, // If you have external images/fonts
+                    logging: false, // Disable logging for cleaner console
+                    scrollX: 0,
+                    scrollY: -window.scrollY // Capture from top of the page, even if scrolled
+                });
+                printScreenImage.src = canvas.toDataURL('image/png');
+                printScreenModal.style.display = 'flex';
+                downloadBtn.href = canvas.toDataURL('image/png');
+                downloadBtn.download = 'real_estate_analysis.png';
+            } catch (error) {
+                console.error("Error capturing screen:", error);
+                alert("Failed to capture screen. Please try again.");
+            } finally {
+                // Restore visibility of hidden elements
+                const buttonsToHide = document.querySelectorAll('#addAnalysisBtn, #saveAnalysesBtn, #loadAnalysesBtn, #printScreenBtn, #shareBtn, .close-analysis-btn, .expense-breakdown-btn, .help-btn, .modal');
+                buttonsToHide.forEach(btn => btn.style.visibility = 'visible';);
+                printScreenModal.style.display = 'flex'; // Ensure modal is visible if it was intended to be
+                loadingOverlay.style.display = 'none'; // Hide loading overlay
+            }
+        });
+
+
+        modalCloseBtn.onclick = function() {
+            printScreenModal.style.display = "none";
+        }
+
+
+        // Initial setup
+        addAnalysisBtn.addEventListener('click', addAnalysisSection);
+        chartMetricSelector.addEventListener('change', updateChart);
+        chartTypeSelector.addEventListener('change', updateChart);
+
+        // Attach event listeners to the initial analysis section
+        attachEventListeners(1);
+        calculateAndDisplayResults(); // Initial calculation on load
+
+        // Load analyses from URL on page load
+        window.addEventListener('load', loadAnalysesFromUrl);
+
     </script>
 </body>
 </html>
