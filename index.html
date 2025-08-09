@@ -568,6 +568,87 @@
             attachListeners(); // Re-attach all listeners
         }
 
+                        // Determine the winner
+                const resultCard = document.getElementById(`result${i}`);
+                const recommendation = document.getElementById(`recommendation${i}`);
+                resultCard.classList.remove('bg-green-100', 'border-green-400', 'bg-red-100', 'border-red-400');
+                recommendation.classList.add('hidden');
+
+                if (monthlyCashFlow > bestCashFlow) {
+                    bestCashFlow = monthlyCashFlow;
+                    cashFlowWinner = i;
+                }
+                if (capRate > bestCapRate) {
+                    bestCapRate = capRate;
+                    capRateWinner = i;
+                }
+                if (cashOnCash > bestCashOnCash) {
+                    bestCashOnCash = cashOnCash;
+                    cashOnCashWinner = i;
+                }
+            }
+            
+            // Highlight the winner based on the chosen metric
+            updateWinnerDisplay(chartMetricSelector.value);
+
+            // Update the chart
+            updateChart();
+        }
+        
+        function updateWinnerDisplay(metric) {
+            let winner = null;
+            let winningValue = -Infinity;
+            let winnerMessage = "";
+
+            // Reset all result cards
+            for (let i = 1; i <= 4; i++) {
+                const resultCard = document.getElementById(`result${i}`);
+                if (resultCard) {
+                    resultCard.classList.remove('bg-green-100', 'border-green-400', 'bg-red-100', 'border-red-400');
+                    const rec = document.getElementById(`recommendation${i}`);
+                    if (rec) rec.classList.add('hidden');
+                }
+            }
+
+            if (metric === 'cashFlow') {
+                for (let i = 0; i < calculatedResults.cashFlows.length; i++) {
+                    if (calculatedResults.cashFlows[i] > winningValue) {
+                        winningValue = calculatedResults.cashFlows[i];
+                        winner = i + 1;
+                    }
+                }
+                if (winner) winnerMessage = `Analysis ${winner} wins with the highest Monthly Cash Flow!`;
+            } else if (metric === 'capRate') {
+                for (let i = 0; i < calculatedResults.capRates.length; i++) {
+                    if (calculatedResults.capRates[i] > winningValue) {
+                        winningValue = calculatedResults.capRates[i];
+                        winner = i + 1;
+                    }
+                }
+                if (winner) winnerMessage = `Analysis ${winner} wins with the highest Cap Rate!`;
+            } else if (metric === 'cashOnCash') {
+                for (let i = 0; i < calculatedResults.cashOnCash.length; i++) {
+                    if (calculatedResults.cashOnCash[i] > winningValue) {
+                        winningValue = calculatedResults.cashOnCash[i];
+                        winner = i + 1;
+                    }
+                }
+                if (winner) winnerMessage = `Analysis ${winner} wins with the highest Cash-on-Cash Return!`;
+            }
+
+            const winnerElement = document.getElementById('winner');
+            winnerElement.textContent = winnerMessage;
+            
+            if (winner) {
+                const winningCard = document.getElementById(`result${winner}`);
+                winningCard.classList.add('bg-green-100', 'border-green-400');
+                const winningRecommendation = document.getElementById(`recommendation${winner}`);
+                winningRecommendation.textContent = "BEST OPTION";
+                winningRecommendation.classList.remove('hidden');
+                winningRecommendation.classList.add('bg-green-500');
+            }
+        }
+        
         // Function to get a recommendation based on investment metrics
         function getRecommendation(monthlyCashFlow, capRate, cashOnCashReturn) {
             let recommendation = { text: '', style: '' };
